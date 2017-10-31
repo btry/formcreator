@@ -33,12 +33,11 @@
 
 global $CFG_GLPI;
 // Version of the plugin
-define('PLUGIN_FORMCREATOR_VERSION', '2.6.4-dev');
+define('PLUGIN_FORMCREATOR_VERSION', '2.7.0');
 // Schema version of this version
-define('PLUGIN_FORMCREATOR_SCHEMA_VERSION', '2.6');
+define('PLUGIN_FORMCREATOR_SCHEMA_VERSION', '2.7');
 // is or is not an official release of the plugin
 define('PLUGIN_FORMCREATOR_IS_OFFICIAL_RELEASE', false);
-
 
 // Minimal GLPI version, inclusive
 define ('PLUGIN_FORMCREATOR_GLPI_MIN_VERSION', '9.2.1');
@@ -313,8 +312,8 @@ function plugin_formcreator_getUuid() {
  * @param $value value to search in provided field
  *
  * @return true if succeed else false
- */
-function plugin_formcreator_getFromDBByField(CommonDBTM $item, $field = '', $value = '') {
+**/
+function plugin_formcreator_getFromDBByField(CommonDBTM $item, $field = "", $value = "") {
    global $DB;
 
    // != 0 because 0 is consider as empty
