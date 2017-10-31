@@ -36,7 +36,7 @@ if (!defined('GLPI_ROOT')) {
    die("Sorry. You can't access this file directly");
 }
 
-abstract class PluginFormcreatorTargetBase extends CommonDBTM
+abstract class PluginFormcreatorTargetBase extends CommonDBTM implements PluginFormcreatorExportableInterface
 {
 
    protected $requesters;
@@ -54,8 +54,6 @@ abstract class PluginFormcreatorTargetBase extends CommonDBTM
    protected $assignedGroups;
 
    protected $attachedDocuments = [];
-
-   abstract public function export();
 
    abstract public function save(PluginFormcreatorForm_Answer $formanswer);
 
@@ -783,8 +781,8 @@ EOS;
       // retrieve answers
       $answers_values = $formanswer->getAnswers($formanswer->getID());
 
-      $section     = new PluginFormcreatorSection();
-      $sections    = $section->getSectionsFromForm($formanswer->fields['plugin_formcreator_forms_id']);
+      $section = new PluginFormcreatorSection();
+      $sections = $section->getSectionsFromForm($formanswer->fields['plugin_formcreator_forms_id']);
       $sectionsIdString = implode(', ', array_keys($sections));
 
       if (count($sections) > 0) {
@@ -802,7 +800,7 @@ EOS;
                $fieldObject = new $classname($question_line, $question_line['answer']);
             }
 
-            $id    = $question_line['id'];
+            $id = $question_line['id'];
             if (!PluginFormcreatorFields::isVisible($question_line['id'], $answers_values)) {
                $name = '';
                $value = '';
