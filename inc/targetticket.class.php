@@ -3,8 +3,7 @@ if (!defined('GLPI_ROOT')) {
    die("Sorry. You can't access this file directly");
 }
 
-class PluginFormcreatorTargetTicket extends PluginFormcreatorTargetBase
-{
+class PluginFormcreatorTargetTicket extends PluginFormcreatorTargetBase {
    public static function getTypeName($nb = 1) {
       return _n('Target ticket', 'Target tickets', $nb, 'formcreator');
    }

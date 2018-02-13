@@ -4,8 +4,7 @@ if (!defined('GLPI_ROOT')) {
    die("Sorry. You can't access this file directly");
 }
 
-class PluginFormcreatorFields
-{
+class PluginFormcreatorFields {
    /**
     * Retrive all field types and file path
     * @return Array     field_type => File_path

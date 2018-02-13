@@ -4,8 +4,7 @@ if (!defined('GLPI_ROOT')) {
    die("Sorry. You can't access this file directly");
 }
 
-class PluginFormcreatorCategory extends CommonTreeDropdown
-{
+class PluginFormcreatorCategory extends CommonTreeDropdown {
    // Activate translation on GLPI 0.85
    var $can_be_translated = true;
 

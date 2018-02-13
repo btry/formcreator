@@ -4,8 +4,7 @@ if (!defined('GLPI_ROOT')) {
    die("Sorry. You can't access this file directly");
 }
 
-class PluginFormcreatorForm_Profile extends CommonDBRelation
-{
+class PluginFormcreatorForm_Profile extends CommonDBRelation {
    static public $itemtype_1 = 'PluginFormcreatorForm';
    static public $items_id_1 = 'plugin_formcreator_forms_id';
    static public $itemtype_2 = 'Profile';

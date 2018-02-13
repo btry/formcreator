@@ -3,8 +3,7 @@ if (!defined('GLPI_ROOT')) {
    die("Sorry. You can't access this file directly");
 }
 
-class PluginFormcreatorTarget extends CommonDBTM
-{
+class PluginFormcreatorTarget extends CommonDBTM {
    /**
     * Check if current user have the right to create and modify requests
     *

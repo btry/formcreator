@@ -3,8 +3,7 @@ if (!defined('GLPI_ROOT')) {
    die("Sorry. You can't access this file directly");
 }
 
-class PluginFormcreatorComposite
-{
+class PluginFormcreatorComposite {
    private $item_targetTicket;
 
    private $targets = [];

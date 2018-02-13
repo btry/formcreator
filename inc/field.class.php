@@ -6,8 +6,7 @@ if (!defined('GLPI_ROOT')) {
 
 require_once(realpath(dirname(__FILE__ ) . '/../../../inc/includes.php'));
 
-abstract class PluginFormcreatorField implements PluginFormcreatorFieldInterface
-{
+abstract class PluginFormcreatorField implements PluginFormcreatorFieldInterface {
    const IS_MULTIPLE = false;
 
    protected $fields = [];

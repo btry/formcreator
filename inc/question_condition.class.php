@@ -3,8 +3,7 @@ if (!defined('GLPI_ROOT')) {
    die("Sorry. You can't access this file directly");
 }
 
-class PluginFormcreatorQuestion_Condition extends CommonDBChild
-{
+class PluginFormcreatorQuestion_Condition extends CommonDBChild {
    static public $itemtype = "PluginFormcreatorQuestion";
    static public $items_id = "plugin_formcreator_questions_id";
 

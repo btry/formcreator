@@ -4,8 +4,7 @@ if (!defined('GLPI_ROOT')) {
    die("Sorry. You can't access this file directly");
 }
 
-class PluginFormcreatorItem_TargetTicket extends CommonDBRelation
-{
+class PluginFormcreatorItem_TargetTicket extends CommonDBRelation {
 
    static public $itemtype_1           = 'itemtype';
    static public $items_id_1           = 'items_id';

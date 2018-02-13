@@ -4,8 +4,7 @@ if (!defined('GLPI_ROOT')) {
    die("Sorry. You can't access this file directly");
 }
 
-class PluginFormcreatorNotificationTargetForm_answer extends NotificationTarget
-{
+class PluginFormcreatorNotificationTargetForm_answer extends NotificationTarget {
    const AUTHOR   = 101;
    const APPROVER = 102;
 

@@ -3,8 +3,7 @@ if (!defined('GLPI_ROOT')) {
    die("Sorry. You can't access this file directly");
 }
 
-class PluginFormcreatorForm_Answer extends CommonDBChild
-{
+class PluginFormcreatorForm_Answer extends CommonDBChild {
    public $dohistory  = true;
    public $usenotepad = true;
    public $usenotepadrights = true;

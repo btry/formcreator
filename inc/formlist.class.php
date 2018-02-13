@@ -4,8 +4,7 @@ if (!defined('GLPI_ROOT')) {
    die("Sorry. You can't access this file directly");
 }
 
-class PluginFormcreatorFormList extends CommonGLPI
-{
+class PluginFormcreatorFormList extends CommonGLPI {
 
    /**
     * Returns the type name with consideration of plural
@@ -34,5 +33,4 @@ class PluginFormcreatorFormList extends CommonGLPI
 
       return $menu;
    }
-
 }
