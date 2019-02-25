@@ -207,16 +207,23 @@ class PluginFormcreatorInstall {
 
       $this->migration->displayMessage("Configure existing entities");
 
-      $query = "SELECT `id` FROM `glpi_entities`
-                WHERE `id` NOT IN (
-                   SELECT `id` FROM `glpi_plugin_formcreator_entityconfigs`
-                )";
-      $result = $DB->query($query);
+      $result = $DB->request([
+         'SELECT' => 'id',
+         'FROM' => 'glpi_entities',
+         'WHERE' => [
+            'NOT' => [
+               new QuerySubQuery([
+                  'SELECT' => 'id',
+                  'FROM' => 'glpi_plugin_formcreator_entityconfigs'
+               ])
+            ]
+         ]
+      ]);
       if (!$result) {
          Toolbox::logInFile('sql-errors', $DB->error());
          die ($DB->error());
       }
-      while ($row = $DB->fetch_assoc($result)) {
+      foreach ($result as $row) {
          $entityConfig = new PluginFormcreatorEntityconfig();
          $entityConfig->add([
                'id'                 => $row['id'],
