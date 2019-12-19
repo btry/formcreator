@@ -25,9 +25,6 @@ install_glpi() {
    if [ -e bin/console ]; then php bin/console dependencies install; fi
    if [ ! -e bin/console ]; then composer install --no-dev; fi
    mkdir -p tests/files/_cache
-   cp -r ../formcreator plugins/$PLUGINNAME
-   cd plugins/$PLUGINNAME
-   composer install
 }
 
 
