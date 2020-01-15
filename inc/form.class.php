@@ -782,6 +782,10 @@ PluginFormcreatorDuplicatableInterface
       echo '</span>';
       echo '</div>';
       echo '<div id="plugin_formcreator_wizard_forms">';
+      echo '<p>' . __('Forms found', 'formcreator')  . '</p>';
+      echo '<p id="plugin_formcreator_formlist"></p>';
+      echo '<p>' . __('FAQ found', 'formcreator')  . '</p>';
+      echo '<p id="plugin_formcreator_faqlist"></p>';
       echo '</div>';
       echo '</div>';
    }

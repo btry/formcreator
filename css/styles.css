@@ -862,10 +862,9 @@ input.submit_button:focus {
    clear: both;
 }
 
-#plugin_formcreator_formlist {
+#plugin_formcreator_formlist, #plugin_formcreator_faqlist {
    margin-top: 10px;
 }
-
 
 @keyframes fadeInUp {
   from {

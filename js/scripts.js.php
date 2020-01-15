@@ -299,11 +299,16 @@ function showTiles(tiles, defaultForms) {
    if (defaultForms) {
       html += '<p><?php echo Toolbox::addslashes_deep(__('No form found. Please choose a form below instead', 'formcreator'))?></p>'
    }
-   html += buildTiles(tiles);
+   items = buildTiles(tiles);
 
-   //Display tiles
-   $('#plugin_formcreator_wizard_forms').empty();
-   $('#plugin_formcreator_wizard_forms').prepend(html);
+   // Display forms
+   $('#plugin_formcreator_formlist').empty();
+   $('#plugin_formcreator_formlist').prepend(items.forms);
+
+   // Display Faqs
+   $('#plugin_formcreator_faqlist').empty();
+   $('#plugin_formcreator_faqlist').prepend(items.faqs);
+
    $('#plugin_formcreator_formlist').masonry({
       horizontalOrder: true
    });
@@ -429,15 +434,11 @@ function buildTiles(list) {
          }
       });
 
-      // concatenate all HTML parts
-      html = '<div id="plugin_formcreator_formlist">'
-      + forms.join("")
-      + '</div><div id="plugin_formcreator_faqlist">'
-      + faqs.join("")
-      + '</div>'
+      return {
+         forms: forms.join(''),
+         faqs: fasq.join('')
+      };
    }
-
-   return html;
 }
 
 var plugin_formcreator = new function() {
