@@ -893,6 +893,23 @@ PluginFormcreatorConditionnableInterface
          $item->update($input);
       } else {
          unset($input['id']);
+
+         // unset id in parameters
+         foreach ($input['_parameters'] as $fieldName => &$parameters) {
+            foreach ($parameters as &$parameter) {
+               unset($parameter['id']);
+            }
+         }
+
+         // prepare conditions to fit  the expected format
+         $conditions = [];
+         foreach ($input['_conditions'] as $condition) {
+            $conditions[PluginFormcreatorQuestion::getForeignKeyField()][] = $condition[PluginFormcreatorQuestion::getForeignKeyField()];
+            $conditions['show_condition'][] = $condition['show_condition'];
+            $conditions['show_value'][]     = $condition['show_value'];
+            $conditions['show_logic'][]     = $condition['show_logic'];
+         }
+         $input['_conditions'] = $conditions;
          $itemId = $item->add($input);
       }
       if ($itemId === false) {
@@ -903,24 +920,8 @@ PluginFormcreatorConditionnableInterface
       // add the question to the linker
       $linker->addObject($originalId, $item);
 
-      // Import conditions
-      if (isset($input['_conditions'])) {
-         foreach ($input['_conditions'] as $condition) {
-            PluginFormcreatorCondition::import($linker, $condition, $itemId);
-         }
-      }
-
-      // Import parameters
-      $field = PluginFormcreatorFields::getFieldInstance(
-         $input['fieldtype'],
-         $item
-      );
-      if (isset($input['_parameters'])) {
-         $parameters = $field->getParameters();
-         foreach ($parameters as $fieldName => $parameter) {
-            $parameter::import($linker, $input['_parameters'][$input['fieldtype']][$fieldName], $itemId);
-         }
-      }
+      // Conditions imported in post_addItem/post_updateItem
+      // Parameters imported in post_addItem/post_updateItem
 
       return $itemId;
    }
