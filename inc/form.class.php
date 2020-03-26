@@ -54,6 +54,14 @@ PluginFormcreatorConditionnableInterface
    const VALIDATION_USER     = 1;
    const VALIDATION_GROUP    = 2;
 
+   public static function  getEnumValidationType() {
+      return [
+         self::VALIDATION_NONE => Dropdown::EMPTY_VALUE,
+         self::VALIDATION_USER  => User::getTypeName(1),
+         self::VALIDATION_GROUP  => Group::getTypeName(1),
+      ];
+   }
+
    public static function canCreate() {
       return Session::haveRight('entity', UPDATE);
    }
@@ -1232,18 +1240,18 @@ PluginFormcreatorConditionnableInterface
       unset($_SESSION['formcreator']['data']);
 
       // Show validator selector
-      if ($this->fields['validation_required'] != PluginFormcreatorForm_Validator::VALIDATION_NONE) {
+      if ($this->fields['validation_required'] != self::VALIDATION_NONE) {
          $validators = [];
          $formValidator = new PluginFormcreatorForm_Validator();
          switch ($this->fields['validation_required']) {
-            case PluginFormcreatorForm_Validator::VALIDATION_GROUP:
+            case self::VALIDATION_GROUP:
                $validatorType = Group::class;
                $result = $formValidator->getValidatorsForForm($this, $validatorType);
                foreach ($result as $validator) {
                   $validators[$validator->getID()] = $validator->fields['completename'];
                }
                break;
-            case PluginFormcreatorForm_Validator::VALIDATION_USER:
+            case self::VALIDATION_USER:
                $validatorType = User::class;
                $result = $formValidator->getValidatorsForForm($this, $validatorType);
                foreach ($result as $validator) {
@@ -1404,14 +1412,14 @@ PluginFormcreatorConditionnableInterface
       if (!isset($this->input['validation_required'])) {
          return;
       }
-      if ($this->input['validation_required'] == PluginFormcreatorForm_Validator::VALIDATION_NONE) {
+      if ($this->input['validation_required'] == self::VALIDATION_NONE) {
          return;
       }
-      if ($this->input['validation_required'] == PluginFormcreatorForm_Validator::VALIDATION_USER
+      if ($this->input['validation_required'] == self::VALIDATION_USER
          && empty($this->input['_validator_users'])) {
          return;
       }
-      if ($this->input['validation_required'] == PluginFormcreatorForm_Validator::VALIDATION_GROUP
+      if ($this->input['validation_required'] == self::VALIDATION_GROUP
          && empty($this->input['_validator_groups'])) {
          return;
       }
@@ -1420,11 +1428,11 @@ PluginFormcreatorConditionnableInterface
       $form_validator->deleteByCriteria(['plugin_formcreator_forms_id' => $this->getID()]);
 
       switch ($this->input['validation_required']) {
-         case PluginFormcreatorForm_Validator::VALIDATION_USER:
+         case self::VALIDATION_USER:
             $validators = $this->input['_validator_users'];
             $validatorItemtype = User::class;
             break;
-         case PluginFormcreatorForm_Validator::VALIDATION_GROUP:
+         case self::VALIDATION_GROUP:
             $validators = $this->input['_validator_groups'];
             $validatorItemtype = Group::class;
             break;
