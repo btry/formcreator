@@ -71,5 +71,17 @@ class PluginFormcreatorUpgradeTo2_10 {
       $migration->dropKey($table, 'validator_id');
       $migration->addKey($table, 'users_id_validator');
       $migration->addKey($table, 'groups_id_validator');
+
+      // sort setting in entityes
+      $table = 'glpi_plugin_formcreator_entityconfigs';
+      if (!$DB->fieldExists($table, 'sort_order')) {
+         // Write default settigns only if the columns must be created
+         $migration->addPostQuery("UPDATE `$table`
+            INNER JOIN `glpi_entities` ON (`$table`.`id` = `glpi_entities`.`id`)
+            SET `sort_order` = '-2'
+            WHERE `level` > '1'"
+         );
+      }
+      $migration->addField($table, 'sort_order', 'integer', ['after' => 'replace_helpdesk']);
    }
 }
