@@ -374,7 +374,6 @@ function plugin_formcreator_hook_update_ticket(CommonDBTM $item) {
       'sub_itemtype'       => 'Ticket',
       'name'               => addslashes($item->fields['name']),
       'status'             => $validationStatus['status'],
-      'date_creation'      => $item->fields['date'],
       'date_mod'           => $item->fields['date_mod'],
       'entities_id'        => $item->fields['entities_id'],
       'is_recursive'       => '0',
