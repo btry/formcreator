@@ -246,7 +246,7 @@ PluginFormcreatorExportableInterface
          Html::showMassiveActionCheckBox(__CLASS__, $row['id']);
          echo '</td>';
          echo '<td>' . $typeName . '</td>';
-         echo '<td>' . $name . '</td>';
+         echo '<td><a href="' . $validator->getLinkURL() . '">' . $name . '</a></td>';
          echo '<td>' . $row['level'] . '</td>';
          echo '<tr>';
       }
