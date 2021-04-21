@@ -50,6 +50,7 @@ class PluginFormcreatorUpgradeTo2_12 {
       $this->addValidationPercent();
 
       $this->changeDropdownTreeSettings();
+      $this->migrateToMultiValidation();
 
       $table = 'glpi_plugin_formcreator_entityconfigs';
       $this->migration->addField($table, 'is_search_visible', 'integer', ['after' => 'is_kb_separated']);
@@ -101,5 +102,70 @@ class PluginFormcreatorUpgradeTo2_12 {
 
       $table = 'glpi_plugin_formcreator_forms_validators';
       $this->migration->addField($table, 'level', 'integer', ['after' => 'items_id', 'value' => '1']);
+   }
+
+   public function migrateToMultiValidation() {
+      global $DB;
+
+      // Need a new table now
+      $DB->query(
+         "CREATE TABLE IF NOT EXISTS `glpi_plugin_formcreator_formanswervalidations` (
+         `id`                                int(11) NOT NULL AUTO_INCREMENT,
+         `plugin_formcreator_formanswers_id` int(11) NOT NULL,
+         `itemtype`                          varchar(255) NOT NULL DEFAULT '',
+         `items_id`                          int(11) NOT NULL,
+         `status`                            int(11) NOT NULL DEFAULT '2',
+         `level`                             int(11) NOT NULL,
+         PRIMARY KEY (`id`),
+         UNIQUE KEY `unicity` (`plugin_formcreator_formanswers_id`,`itemtype`,`items_id`, `level`)
+         ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;"
+      );
+
+      $table = 'glpi_plugin_formcreator_formanswervalidations';
+      $formanswerTable = 'glpi_plugin_formcreator_formanswers';
+
+      $DB->query("INSERT INTO `$table` (
+         `plugin_formcreator_formanswers_id`,
+         `itemtype`,
+         `items_id`,
+         `status`,
+         `level`
+      ) (SELECT
+         `$formanswerTable`.`id`,
+         'User',
+         `$formanswerTable`.`users_id_validator`,
+         if (`$formanswerTable`.`status` < 100, `$formanswerTable`.`status`,
+            if (`$formanswerTable`.`status` = 101, 2,
+               if(`$formanswerTable`.`status` = 102, 4, 3))),
+         '1'
+         FROM `$formanswerTable`
+         WHERE `users_id_validator` > 0
+      )");
+
+      $DB->query("INSERT INTO `$table` (
+         `plugin_formcreator_formanswers_id`,
+         `itemtype`,
+         `items_id`,
+         `status`,
+         `level`
+      ) (SELECT
+         `$formanswerTable`.`id`,
+         'Group',
+         `$formanswerTable`.`groups_id_validator`,
+         if (`$formanswerTable`.`status` < 100, `$formanswerTable`.`status`,
+            if (`$formanswerTable`.`status` = 101, 2,
+               if(`$formanswerTable`.`status` = 102, 4, 3))),
+         '1'
+         FROM `$formanswerTable`
+         WHERE `groups_id_validator` > 0
+      )");
+
+      $table = 'glpi_plugin_formcreator_issues';
+      $this->migration->changeField($table, 'original_id', 'items_id', 'integer');
+      $this->migration->changeField($table, 'sub_itemtype', 'itemtype', 'string');
+      $this->migration->dropKey($table, 'original_id_sub_itemtype');
+      $this->migration->addKey($table, ['itemtype', 'items_id'], 'item');
+      $this->migration->dropField($table, 'users_id_validator');
+      $this->migration->dropField($table, 'groups_id_validator');
    }
 }

@@ -162,11 +162,12 @@ class PluginFormcreatorFormAnswer extends CommonTestCase {
          'itemtype' => \User::getType(),
          'items_id' => 2 // user is glpi
       ]);
+      $this->boolean($formValidator->isNewItem())->isFalse();
 
       $formAnswer = new \PluginFormcreatorFormAnswer();
       $formAnswer->add([
          'plugin_formcreator_forms_id' => $form->getID(),
-         'formcreator_validator'       => \Session::getLoginUserID(),
+         'formcreator_validator'       => \User::getType() . '_' . \Session::getLoginUserID(),
       ]);
       $this->boolean($formAnswer->isNewItem())->isFalse();
 

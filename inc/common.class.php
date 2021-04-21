@@ -258,23 +258,17 @@ JAVASCRIPT;
     * V = status picked from Validation
     *
     * @param Ticket $item
-    * @return array
+    * @return int
     */
-   public static function getTicketStatusForIssue(Ticket $item) : array {
+   public static function getTicketStatusForIssue(Ticket $item) : int {
       $ticketValidations = (new TicketValidation())->find([
          'tickets_id' => $item->getID(),
       ], [
          'timeline_position ASC'
       ], 1);
-      $user = 0;
       $reloadedItem = new Ticket();
       $reloadedItem->getFromDB($item->getID());
-      $validationPercent = $reloadedItem->fields['validation_percent'];
       $ticketValidationCount = count($ticketValidations);
-      if ($ticketValidationCount) {
-         $row = array_shift($ticketValidations);
-         $user = $row['users_id_validate'];
-      }
 
       $status = $item->fields['status'];
       if ($ticketValidationCount > 0 && !in_array($item->fields['global_validation'], [TicketValidation::ACCEPTED, TicketValidation::NONE])) {
@@ -292,7 +286,7 @@ JAVASCRIPT;
          }
       }
 
-      return ['status' => $status, 'user' => $user, 'validation_percent' => $validationPercent];
+      return (int) $status;
    }
 
    /**

@@ -354,6 +354,8 @@ PluginFormcreatorTranslatableInterface
 
          // The validator entity
          case self::DESTINATION_ENTITY_VALIDATOR :
+            // when a valdiator accepts a formanswer the formanswer must switch to "accepted"
+            // this tells that the validator is the last one and should be used to find the entity
             $userObj = new User();
             $userObj->getFromDB($formanswer->fields['users_id_validator']);
             $entityId = $userObj->fields[$entityFk];

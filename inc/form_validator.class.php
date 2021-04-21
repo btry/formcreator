@@ -195,6 +195,7 @@ PluginFormcreatorExportableInterface
       echo '</table>';
       if (count($rows) < 1) {
          // No valdiatorr to show
+         echo "<p>".__('No validator', 'formcreator')."</p>";
          return;
       }
 

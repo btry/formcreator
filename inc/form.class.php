@@ -988,15 +988,17 @@ PluginFormcreatorTranslatableInterface
          }
          echo "</ul>";
          echo '<div align="center">';
-         echo '<a href="formanswer.php?criteria[0][field]=4&criteria[0][searchtype]=equals&criteria[0][value]='.$userId.'">';
+         $criteria = 'criteria[0][field]=4'
+         . '&criteria[0][searchtype]=equals'
+         . '&criteria[0][value]=' . $userId;
+         echo '<a href="formanswer.php?' . $criteria . '">';
          echo __('All my forms (requester)', 'formcreator');
          echo '</a>';
          echo '</div>';
       }
       echo '</div>';
 
-      if (Session::haveRight('ticketvalidation', TicketValidation::VALIDATEINCIDENT)
-            || Session::haveRight('ticketvalidation', TicketValidation::VALIDATEREQUEST)) {
+      if (PluginFormcreatorCommon::canValidate()) {
 
          echo '<div class="plugin_formcreator_card">';
          echo '<div class="plugin_formcreator_heading">'.sprintf(__('My %1$d last forms (validator)', 'formcreator'), $limit).'</div>';
@@ -1029,9 +1031,11 @@ PluginFormcreatorTranslatableInterface
             }
             echo "</ul>";
             echo '<div align="center">';
-            $criteria = 'criteria[0][field]=5&criteria[0][searchtype]=equals&criteria[0][value]=' . $_SESSION['glpiID'];
+            $criteria = 'criteria[0][field]=10'
+                      . '&criteria[0][searchtype]=equals'
+                      . '&criteria[0][value]=' . $userId;
             $criteria.= "&criteria[1][link]=OR"
-                      . "&criteria[1][field]=7"
+                      . "&criteria[1][field]=11"
                       . "&criteria[1][searchtype]=equals"
                       . "&criteria[1][value]=mygroups";
 
