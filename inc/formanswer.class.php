@@ -1799,7 +1799,7 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
     * @param array $crit criteria used to filter results
     * @return array|null
     */
-   public function getApprovers(array $crit = [], $order = ['itemtype ASC']): ?array{
+   public function getApprovers(array $crit = [], $order = ['itemtype ASC']): ?array {
       if ($this->isNewItem()) {
          return null;
       }

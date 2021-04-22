@@ -64,8 +64,9 @@ class PluginFormcreatorNotificationTargetFormAnswer extends NotificationTarget
       ]);
       $this->data['##formcreator.form_validator##'] = '';
       $validator = new User();
-      if (count($validators[User::getType()]) == 1) {
-         $userId = array_pop(array_keys($validators[User::getType()]));
+      if ($validators !== null && count($validators[User::getType()]) == 1) {
+         $users = array_keys($validators[User::getType()]);
+         $userId = array_pop($users);
          $validator->getFromDB($userId);
       }
 
