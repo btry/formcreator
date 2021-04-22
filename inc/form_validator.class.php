@@ -66,6 +66,15 @@ PluginFormcreatorExportableInterface
       return _n('Validator', 'Validators', $nb, 'formcreator');
    }
 
+   public static function getEnumValidationStatus() {
+      return [
+         self::VALIDATION_STATUS_NONE     => __('None', 'formcreator'),
+         self::VALIDATION_STATUS_WAITING  => __('Waiting', 'formcreator'),
+         self::VALIDATION_STATUS_ACCEPTED => __('Accepted', 'formcreator'),
+         self::VALIDATION_STATUS_REFUSED  => __('Refused', 'formcreator'),
+      ];
+   }
+
    public  function getValidatorsCount(PluginFormcreatorForm $item) {
       global $DB;
       $formTable = PluginFormcreatorForm::getTable();
@@ -155,6 +164,9 @@ PluginFormcreatorExportableInterface
 
          echo "<form method='post' action='".self::getFormURL()."'>";
          echo "<div class='spaced'><table class='tab_cadre_fixe'>";
+         echo "<tr class='tab_bg_1'><th colspan='4' class='center'>";
+         echo __('Add a validator', 'formcreator');
+         echo "</th>";
          echo "<tr class='tab_bg_1'><td class='center'>";
          echo __('Validation level', 'formcreator');
          echo "</td><td width='20%'>";
@@ -192,6 +204,7 @@ PluginFormcreatorExportableInterface
       echo '</table>';
       if (count($rows) < 1) {
          // No valdiatorr to show
+         echo "<p>".__('No validator', 'formcreator')."</p>";
          return;
       }
 
@@ -243,7 +256,7 @@ PluginFormcreatorExportableInterface
          Html::showMassiveActionCheckBox(__CLASS__, $row['id']);
          echo '</td>';
          echo '<td>' . $typeName . '</td>';
-         echo '<td>' . $name . '</td>';
+         echo '<td><a href="' . $validator->getLinkURL() . '">' . $name . '</a></td>';
          echo '<td>' . $row['level'] . '</td>';
          echo '<tr>';
       }
@@ -477,8 +490,7 @@ PluginFormcreatorExportableInterface
             "$profileRightTable.name" => "ticketvalidation",
             [
                'OR' => [
-                  "$profileRightTable.rights" => ['&', TicketValidation::VALIDATEREQUEST],
-                  "$profileRightTable.rights" => ['&', TicketValidation::VALIDATEINCIDENT],
+                  "$profileRightTable.rights" => ['&', TicketValidation::VALIDATEREQUEST | TicketValidation::VALIDATEINCIDENT],
                ],
             ],
             "$userTable.is_active" => '1',
@@ -569,7 +581,7 @@ PluginFormcreatorExportableInterface
             "$profileRightTable.name" => "ticketvalidation",
             [
                'OR' => [
-                  "$profileRightTable.rights" => ['&', TicketValidation::VALIDATEINCIDENT | TicketValidation::VALIDATEREQUEST],
+                  "$profileRightTable.rights" => ['&', TicketValidation::VALIDATEREQUEST | TicketValidation::VALIDATEINCIDENT],
                ],
             ],
             "$userTable.is_active" => '1',

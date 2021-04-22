@@ -84,9 +84,11 @@ class PluginFormcreatorFormanswerValidation extends CommonDBTM
             $formAnswerFk => $formAnswer->getID(),
          ],
          'GROUPBY' => ['level'],
+         'ORDERBY' => 'level ASC'
       ]);
 
       $acceptedCount = $refusedCount = 0;
+      $maxLevel = 0;
       foreach ($result as $row) {
          switch ($row['status']) {
             case PluginFormcreatorForm_Validator::VALIDATION_STATUS_ACCEPTED:
@@ -96,22 +98,15 @@ class PluginFormcreatorFormanswerValidation extends CommonDBTM
             case PluginFormcreatorForm_Validator::VALIDATION_STATUS_REFUSED:
                $refusedCount++;
                break;
+
+            case PluginFormcreatorForm_Validator::VALIDATION_STATUS_WAITING:
+               $maxLevel = $row['level']; // rows are order by level ASC to pick the highest level
          }
+         $maxLevel = $row['level']; // depends on ORDERBY clause
       }
 
-      // Get max validation level
-      $request = [
-         'SELECT' => ['MAX' => 'level as level'],
-         'FROM' => self::getTable(),
-         'WHERE' => [
-            $formAnswerFk => $formAnswer->getID(),
-         ],
-      ];
-      $max = $DB->request($request)->next();
-      $maxLevel = ($max !== null) ? $max['level'] : 0;
-
       $validationPercent = $formAnswer->fields['validation_percent'];
-      if ($validationPercent > 0) {
+      if ($validationPercent > 0 && $maxLevel > 0) {
          // A validation percent is defined
          $acceptedRatio = $acceptedCount * 100 / $maxLevel;
          $refusedRatio = $refusedCount * 100 / $maxLevel;

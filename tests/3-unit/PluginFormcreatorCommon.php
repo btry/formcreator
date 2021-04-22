@@ -206,7 +206,7 @@ class PluginFormcreatorCommon extends CommonTestCase {
          $ticket->fields['global_validation'] = \CommonITILValidation::NONE;
          $dataSet = [
             'ticket' => $ticket,
-            'expected' => ['user' => 4, 'status' => $ticketStatus]
+            'expected' => $ticketStatus
          ];
          $data["validation none, " . \Ticket::getStatus($ticketStatus)] = $dataSet;
 
@@ -218,7 +218,7 @@ class PluginFormcreatorCommon extends CommonTestCase {
          ]);
          $dataSet = [
             'ticket' => $ticket,
-            'expected' => ['user' => 0, 'status' => $ticketStatus]
+            'expected' => $ticketStatus
          ];
          $data["no validation, " . \Ticket::getStatus($ticketStatus)] = $dataSet;
 
@@ -243,7 +243,7 @@ class PluginFormcreatorCommon extends CommonTestCase {
          $ticket->fields['global_validation'] = \CommonITILValidation::ACCEPTED;
          $dataSet = [
             'ticket' => $ticket,
-            'expected' => ['user' => 4, 'status' => $ticketStatus]
+            'expected' => $ticketStatus
          ];
          $data["validation accepted, " . \Ticket::getStatus($ticketStatus)] = $dataSet;
       }
@@ -279,7 +279,7 @@ class PluginFormcreatorCommon extends CommonTestCase {
          $ticket->fields['global_validation'] = \CommonITILValidation::WAITING;
          $dataSet = [
             'ticket' => $ticket,
-            'expected' => ['user' => 4, 'status' => \PluginFormcreatorFormAnswer::STATUS_WAITING]
+            'expected' => \PluginFormcreatorFormAnswer::STATUS_WAITING
          ];
          $data["validation waiting, " . \CommonITILValidation::getStatus(\CommonITILValidation::WAITING)] = $dataSet;
       }
@@ -310,7 +310,7 @@ class PluginFormcreatorCommon extends CommonTestCase {
          $ticket->fields['global_validation'] = \CommonITILValidation::WAITING;
          $dataSet = [
             'ticket' => $ticket,
-            'expected' => ['user' => 4, 'status' => $ticketStatus]
+            'expected' => $ticketStatus
          ];
          $data["validation waiting, " . \Ticket::getStatus($ticketStatus)] = $dataSet;
       }
@@ -346,7 +346,7 @@ class PluginFormcreatorCommon extends CommonTestCase {
          $ticket->fields['global_validation'] = \CommonITILValidation::REFUSED;
          $dataSet = [
             'ticket' => $ticket,
-            'expected' => ['user' => 4, 'status' => \PluginFormcreatorFormAnswer::STATUS_REFUSED]
+            'expected' => \PluginFormcreatorFormAnswer::STATUS_REFUSED
          ];
          $data["validation refused, " . \CommonITILValidation::getStatus(\CommonITILValidation::REFUSED)] = $dataSet;
       }
@@ -377,7 +377,7 @@ class PluginFormcreatorCommon extends CommonTestCase {
          $ticket->fields['global_validation'] = \CommonITILValidation::REFUSED;
          $dataSet = [
             'ticket' => $ticket,
-            'expected' => ['user' => 4, 'status' => $ticketStatus]
+            'expected' => $ticketStatus
          ];
          $data["validation refused, " . \Ticket::getStatus($ticketStatus)] = $dataSet;
       }
@@ -394,7 +394,6 @@ class PluginFormcreatorCommon extends CommonTestCase {
     */
    public function testGetTicketStatusForIssue($ticket, $expected) {
       $output = \PluginFormcreatorCommon::getTicketStatusForIssue($ticket);
-      $this->integer((int) $output['status'])->isEqualTo($expected['status']);
-      $this->integer((int) $output['user'])->isEqualTo($expected['user']);
+      $this->integer((int) $output)->isEqualTo($expected);
    }
 }

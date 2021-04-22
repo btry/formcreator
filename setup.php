@@ -196,8 +196,8 @@ function plugin_init_formcreator() {
                   }
                   $issue = new PluginFormcreatorIssue();
                   $issue->getFromDBByCrit([
-                     'sub_itemtype' => Ticket::class,
-                     'original_id'  => (int) $_GET['id']
+                     'itemtype' => Ticket::class,
+                     'items_id' => (int) $_GET['id']
                   ]);
                   if ($issue->isNewItem()) {
                      Html::displayNotFoundError();
