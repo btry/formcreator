@@ -1784,40 +1784,6 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
     * Get the approver users and the approver groups in respect of the
     * current valdiation level
     *
-    * @param array $crit criteria used to filter results
-    * @return array|null
-    */
-   public function getApprovers(array $crit = []): ?array{
-      if ($this->isNewItem()) {
-         return null;
-      }
-
-      $formAnswerValidation = new PluginFormcreatorFormAnswerValidation();
-      $rows = $formAnswerValidation->find(
-         $crit + [
-            self::getForeignKeyField() => $this->getID(),
-         ],
-         ['itemtype ASC']
-      );
-      if (count($rows) < 1) {
-         return null;
-      }
-
-      $approvers = [
-         User::getType()  => [],
-         Group::getType() => [],
-      ];
-      foreach ($rows as $row) {
-         $approvers[$row['itemtype']][$row['items_id']] = $row['items_id'];
-      }
-
-      return $approvers;
-   }
-
-   /**
-    * Get the approver users and the approver groups in respect of the
-    * current valdiation level
-    *
     * When not null, the returned arry looks like the following
     * [
     *    'User' => [
