@@ -58,8 +58,16 @@ class PluginFormcreatorNotificationTargetFormAnswer extends NotificationTarget
 
       $requester = new User();
       $requester->getFromDB($this->obj->fields['requester_id']);
+      $validators = $this->obj->getApprovers([
+         'level'    => '1',
+         'itemtype' => User::getType(),
+      ]);
+      $this->data['##formcreator.form_validator##'] = '';
       $validator = new User();
-      $validator->getFromDB($this->obj->fields['users_id_validator']);
+      if (count($validators[User::getType()]) == 1) {
+         $userId = array_pop(array_keys($validators[User::getType()]));
+         $validator->getFromDB($userId);
+      }
 
       $this->data['##formcreator.form_id##']            = $form->getID();
       $this->data['##formcreator.form_name##']          = $form->fields['name'];
@@ -104,12 +112,17 @@ class PluginFormcreatorNotificationTargetFormAnswer extends NotificationTarget
             $this->addUserByField('requester_id', true);
             break;
          case self::APPROVER :
-            if ($this->obj->fields['users_id_validator'] > 0) {
-               $this->addUserByField('users_id_validator', true);
+            $rows = $this->obj->getApprovers([
+               'level' => ['=', PluginFormcreatorFormAnswerValidation::getCurrentValidationLevel($this->obj)],
+            ]);
+            foreach (array_keys($rows[User::getType()]) as $userId) {
+               $this->obj->fields['_users_id_validator'] = $userId;
+               $this->addUserByField('_users_id_validator', true);
             }
-            if ($this->obj->fields['groups_id_validator'] > 0) {
-               $this->addForGroup(0, $this->obj->fields['groups_id_validator']);
+            foreach (array_keys($rows[Group::getType()]) as $groupId) {
+               $this->addForGroup(0, $groupId);
             }
+            unset($this->obj->fields['_users_id_validator']);
             break;
       }
    }

@@ -66,6 +66,15 @@ PluginFormcreatorExportableInterface
       return _n('Validator', 'Validators', $nb, 'formcreator');
    }
 
+   public static function getEnumValidationStatus() {
+      return [
+         self::VALIDATION_STATUS_NONE     => __('None', 'formcreator'),
+         self::VALIDATION_STATUS_WAITING  => __('Waiting', 'formcreator'),
+         self::VALIDATION_STATUS_ACCEPTED => __('Accepted', 'formcreator'),
+         self::VALIDATION_STATUS_REFUSED  => __('Refused', 'formcreator'),
+      ];
+   }
+
    public  function getValidatorsCount(PluginFormcreatorForm $item) {
       global $DB;
       $formTable = PluginFormcreatorForm::getTable();
