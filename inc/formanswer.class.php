@@ -1360,8 +1360,8 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
             break;
          case self::STATUS_ACCEPTED :
             // Notify the requester
-            $form = $this->getForm();
-            if ($form->validationRequired()) {
+            $validations = $this->getApprovers();
+            if ($validations !== null) {
                NotificationEvent::raiseEvent('plugin_formcreator_accepted', $this);
             } else {
                NotificationEvent::raiseEvent('plugin_formcreator_form_created', $this);
