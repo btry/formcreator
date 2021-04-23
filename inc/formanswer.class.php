@@ -1168,25 +1168,27 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
    public function post_updateItem($history = 1) {
       // Save questions answers
       $formAnswerId = $this->getID();
-      /** @var PluginFormcreatorAbstractField $field */
-      foreach ($this->questionFields as $questionId => $field) {
-         $field->moveUploads();
-         $answer = new PluginFormcreatorAnswer();
-         $answer->getFromDBByCrit([
-            'plugin_formcreator_formanswers_id' => $formAnswerId,
-            'plugin_formcreator_questions_id' => $questionId,
-         ]);
-         $answer->update([
-            'id'     => $answer->getID(),
-            'answer' => $field->serializeValue(),
-         ], 0);
-         foreach ($field->getDocumentsForTarget() as $documentId) {
-            $docItem = new Document_Item();
-            $docItem->add([
-               'documents_id' => $documentId,
-               'itemtype'     => __CLASS__,
-               'items_id'     => $formAnswerId,
+      if ($this->questionFields !== null) {
+         /** @var PluginFormcreatorAbstractField $field */
+         foreach ($this->questionFields as $questionId => $field) {
+            $field->moveUploads();
+            $answer = new PluginFormcreatorAnswer();
+            $answer->getFromDBByCrit([
+               'plugin_formcreator_formanswers_id' => $formAnswerId,
+               'plugin_formcreator_questions_id' => $questionId,
             ]);
+            $answer->update([
+               'id'     => $answer->getID(),
+               'answer' => $field->serializeValue(),
+            ], 0);
+            foreach ($field->getDocumentsForTarget() as $documentId) {
+               $docItem = new Document_Item();
+               $docItem->add([
+                  'documents_id' => $documentId,
+                  'itemtype'     => __CLASS__,
+                  'items_id'     => $formAnswerId,
+               ]);
+            }
          }
       }
       $this->sendNotification();
