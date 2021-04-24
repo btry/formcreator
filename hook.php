@@ -88,7 +88,6 @@ function plugin_formcreator_addDefaultJoin($itemtype, $ref_table, &$already_link
          $join = str_replace('`glpi_tickets`.`id`', '`glpi_plugin_formcreator_issues`.`itemtype` = "Ticket" AND `glpi_plugin_formcreator_issues`.`items_id`', $join);
          $join = str_replace('`glpi_tickets`', '`glpi_plugin_formcreator_issues`', $join);
          $join = str_replace('`users_id_recipient`', '`requester_id`', $join);
-         $join .= Search::addLeftJoin($itemtype, $ref_table, $already_link_tables, Group::getTable(), 'groups_id_validator');
          $issueSo = Search::getOptions($itemtype);
          $join .= Search::addLeftJoin(
             $itemtype,
