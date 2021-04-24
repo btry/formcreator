@@ -149,46 +149,6 @@ function plugin_formcreator_addDefaultJoin($itemtype, $ref_table, &$already_link
 }
 
 /**
- * Undocumented function
- *
- * @param string $itemtype
- * @return string
- */
-function plugin_formcreator_getCondition($itemtype) {
-   $table = $itemtype::getTable();
-   $currentUserId = Session::getLoginUserID();
-
-   if ($itemtype != PluginFormcreatorFormAnswer::class) {
-      return '';
-   }
-   if (Session::haveRight('config', UPDATE)) {
-      return '';
-   }
-
-   if (PluginFormcreatorCommon::canValidate()) {
-      $condition = " (`$table`.`users_id_validator` = $currentUserId";
-      $groups = Group_User::getUserGroups($currentUserId);
-      if (count($groups) < 1) {
-         $condition .= ")";
-         return $condition;
-      }
-
-      // Add current user's groups to the condition
-      $groupIDs = [];
-      foreach ($groups as $group) {
-         $groupIDs[] = $group['id'];
-      }
-      $groupIDs = implode(',', $groupIDs);
-      $condition .= " OR `$table`.`groups_id_validator` IN ($groupIDs)";
-      $condition .= ")";
-      return $condition;
-   }
-
-   $condition = " `$table`.`requester_id` = $currentUserId";
-   return $condition;
-}
-
-/**
  * Define specific search request
  *
  * @param  String $itemtype    Itemtype for the search engine
