@@ -1699,8 +1699,11 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
       }
 
       $answers_values = $this->getAnswers($this->getID());
-      foreach (array_keys($this->questionFields) as $id) {
-         $this->questionFields[$id]->deserializeValue($answers_values['formcreator_field_' . $id]);
+      foreach ($this->questionFields as $id => $questionField) {
+         if (!isset($answers_values['formcreator_field_' . $id])) {
+            continue;
+         }
+         $questionField->deserializeValue($answers_values['formcreator_field_' . $id]);
       }
 
       return true;
