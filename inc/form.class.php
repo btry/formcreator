@@ -486,7 +486,7 @@ PluginFormcreatorTranslatableInterface
    }
 
    public function showTargets($ID, $options = []) {
-      echo '<table class="tab_cadre_fixe">';
+      echo '<table class="tab_cadre_fixehov">';
 
       echo '<tr>';
       echo '<th colspan="3">'._n('Target', 'Targets', 2, 'formcreator').'</th>';
@@ -498,7 +498,7 @@ PluginFormcreatorTranslatableInterface
       foreach ($allTargets as $targetType => $targets) {
          foreach ($targets as $targetId => $target) {
             $i++;
-            echo '<tr class="line'.($i % 2).'">';
+            echo '<tr>';
             $targetItemUrl = Toolbox::getItemTypeFormURL($targetType) . '?id=' . $targetId;
             // echo '<td onclick="document.location=\'' . $targetItemUrl . '\'" style="cursor: pointer">';
             $onclick = "plugin_formcreator_editTarget('$targetType', $targetId)";
@@ -524,7 +524,7 @@ PluginFormcreatorTranslatableInterface
       }
 
       // Display add target link...
-      echo '<tr class="line'.(($i + 1) % 2).'" id="add_target_row">';
+      echo '<tr id="add_target_row">';
       echo '<td colspan="3">';
       echo '<a href="javascript:plugin_formcreator_addTarget('.$ID.', \''.$token.'\');">
                 <i class="fa fa-plus"></i>
@@ -534,7 +534,7 @@ PluginFormcreatorTranslatableInterface
       echo '</tr>';
 
       // OR display add target form
-      echo '<tr class="line'.(($i + 1) % 2).'" id="add_target_form" style="display: none;">';
+      echo '<tr id="add_target_form" style="display: none;">';
       echo '<td colspan="3" id="add_target_form_td"></td>';
       echo '</tr>';
 
@@ -2166,7 +2166,7 @@ PluginFormcreatorTranslatableInterface
 
       echo '<tr><th colspan="4">'.__('Add a target', 'formcreator').'</th></tr>';
 
-      echo '<tr class="line1">';
+      echo '<tr>';
       echo '<td width="15%"><strong>'.__('Name').' <span style="color:red;">*</span></strong></td>';
       echo '<td width="40%"><input type="text" name="name" style="width:100%;" value="" required="required"/></td>';
       echo '<td width="15%"><strong>'._n('Type', 'Types', 1).' <span style="color:red;">*</span></strong></td>';
@@ -2185,7 +2185,7 @@ PluginFormcreatorTranslatableInterface
       echo '</td>';
       echo '</tr>';
 
-      echo '<tr class="line0">';
+      echo '<tr>';
       echo '<td colspan="4" class="center">';
       echo Html::hidden('plugin_formcreator_forms_id', ['value' => $this->getID()]);
       echo Html::submit(__('Add'), ['name' => 'add_target']);
