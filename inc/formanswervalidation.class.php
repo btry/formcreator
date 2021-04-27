@@ -98,9 +98,6 @@ class PluginFormcreatorFormanswerValidation extends CommonDBTM
             case PluginFormcreatorForm_Validator::VALIDATION_STATUS_REFUSED:
                $refusedCount++;
                break;
-
-            case PluginFormcreatorForm_Validator::VALIDATION_STATUS_WAITING:
-               $maxLevel = $row['level']; // rows are order by level ASC to pick the highest level
          }
          $maxLevel = $row['level']; // depends on ORDERBY clause
       }
@@ -111,17 +108,17 @@ class PluginFormcreatorFormanswerValidation extends CommonDBTM
          $acceptedRatio = $acceptedCount * 100 / $maxLevel;
          $refusedRatio = $refusedCount * 100 / $maxLevel;
          if ($acceptedRatio >= $validationPercent) {
+            // We have reached the acceptation threshold
             return PluginFormcreatorForm_Validator::VALIDATION_STATUS_ACCEPTED;
-         }
-         if ($refusedRatio >= $validationPercent) {
+         } else  if ($refusedRatio + $validationPercent > 100) {
+            // We can no longer reach the acceptation threshold
             return PluginFormcreatorForm_Validator::VALIDATION_STATUS_REFUSED;
          }
       } else {
          // No validation threshold set, one approval or denial is enough
          if ($acceptedCount > 0) {
             return PluginFormcreatorForm_Validator::VALIDATION_STATUS_ACCEPTED;
-         }
-         if ($refusedCount > 0) {
+         } else if ($refusedCount > 0) {
             return PluginFormcreatorForm_Validator::VALIDATION_STATUS_REFUSED;
          }
       }
