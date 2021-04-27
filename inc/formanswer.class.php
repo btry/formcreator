@@ -1828,18 +1828,6 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
          $approvers[$row['itemtype']][$row['items_id']] = $row;
       }
 
-      /**
-       * [
-       *    'User' => [
-       *       users_id => [id, level, status, itemtype, items_id],
-       *       ...
-       *    ],
-       *    'Group' => [
-       *       groups_id => [id, level, status, itemtype, items_id],
-       *       ...
-       *    ]
-       * ]
-       */
       return $approvers;
    }
 }
