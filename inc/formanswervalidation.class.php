@@ -35,7 +35,13 @@ if (!defined('GLPI_ROOT')) {
 
 class PluginFormcreatorFormanswerValidation extends CommonDBTM
 {
-   public static function getCurrentValidationLevel(PluginFormcreatorFormAnswer $formAnswer) {
+   /**
+    * Get the current validation level of a formanswer
+    *
+    * @param PluginFormcreatorFormAnswer $formAnswer formanswer
+    * @return int
+    */
+   public static function getCurrentValidationLevel(PluginFormcreatorFormAnswer $formAnswer): int {
       global $DB;
 
       $formAnswerFk = PluginFormcreatorFormAnswer::getForeignKeyField();
@@ -57,7 +63,14 @@ class PluginFormcreatorFormanswerValidation extends CommonDBTM
       return $max['level'] + 1;
    }
 
-   public static function updateValidationStatusForLevel(PluginFormcreatorFormAnswer $formAnswer, int $newStatus) {
+   /**
+    * Set the status of a validation level for a formanswer
+    *
+    * @param PluginFormcreatorFormAnswer $formAnswer
+    * @param integer $newStatus
+    * @return void
+    */
+   public static function updateValidationStatusForLevel(PluginFormcreatorFormAnswer $formAnswer, int $newStatus): void {
       $level = self::getCurrentValidationLevel($formAnswer);
 
       $self = new self();
@@ -74,7 +87,14 @@ class PluginFormcreatorFormanswerValidation extends CommonDBTM
       }
    }
 
-   public static function computeValidationStatus(PluginFormcreatorFormAnswer $formAnswer) {
+   /**
+    * Get the validation status taking into account the required validation ratio,
+    * the count of accepted answers and the count of refused answers
+    *
+    * @param PluginFormcreatorFormAnswer $formAnswer
+    * @return int
+    */
+   public static function computeValidationStatus(PluginFormcreatorFormAnswer $formAnswer): int {
       global $DB;
 
       $formAnswerFk = PluginFormcreatorFormAnswer::getForeignKeyField();
