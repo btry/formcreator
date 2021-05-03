@@ -82,7 +82,6 @@ class PluginFormcreatorForm_Validator extends CommonTestCase {
       $user->getFromDBbyName('glpi');
 
       $form = $this->getForm();
-      $this->boolean($form->isNewItem())->isFalse();
 
       $formValidator = new \PluginFormcreatorForm_Validator();
       $formValidator->add([

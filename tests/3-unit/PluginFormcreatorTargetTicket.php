@@ -223,12 +223,8 @@ class PluginFormcreatorTargetTicket extends CommonTestCase {
       ]);
       $this->boolean($ticket->isNewItem())->isFalse();
 
-      $form = new \PluginFormcreatorForm();
       $formFk = \PluginFormcreatorForm::getForeignKeyField();
-      $form->add([
-         'name' => 'a form'
-      ]);
-      $this->boolean($form->isNewItem())->isFalse();
+      $form = $this->getForm(['name' => 'a form']);
 
       $targetTicket_1 = new \PluginFormcreatorTargetTicket();
       $targetTicket_1->add([
