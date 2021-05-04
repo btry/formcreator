@@ -126,7 +126,19 @@ PluginFormcreatorExportableInterface
          $input['uuid'] = plugin_formcreator_getUuid();
       }
 
+      if (!isset($input['level']) || $input['level'] < 1) {
+         return false;
+      }
+
       return $input;
+   }
+
+   public function prepareInputForUpdate($input) {
+      $level = $input['level'] ?? $this->fields['level'];
+
+      if ($level < 1) {
+         return false;
+      }
    }
 
    public function showForForm(PluginFormcreatorForm $item, $options = []) {
@@ -401,43 +413,35 @@ PluginFormcreatorExportableInterface
     * Get validators of type $itemtype associated to a form
     *
     * @param PluginFormcreatorForm $form
-    * @param string $itemtype
-    * @return User[]|Group[] array of User or Group objects
+    * @param string $condition
+    * @return array of validators
     */
-   public function getValidatorsForForm(PluginFormcreatorForm $form, $itemtype) {
+   public static function getValidatorsForForm(PluginFormcreatorForm $form, $condition = []): array {
       global $DB;
-
-      if (!in_array($itemtype, [User::class, Group::class])) {
-         return [];
-      }
 
       $formValidatorTable = PluginFormcreatorForm_Validator::getTable();
       $formFk = PluginFormcreatorForm::getForeignKeyField();
-      $itemTable = $itemtype::getTable();
 
       $rows = $DB->request([
          'SELECT' => [
-            $itemTable => ['id']
+            'itemtype',
+            'items_id'
          ],
-         'FROM' => $itemTable,
-         'LEFT JOIN' => [
-            $formValidatorTable => [
-               'FKEY' => [
-                  $formValidatorTable => 'items_id',
-                  $itemTable => 'id'
-               ]
-            ],
-         ],
-         'WHERE' => [
-            "$formValidatorTable.itemtype" => $itemtype,
+         'FROM' => $formValidatorTable,
+         'WHERE' => $condition + [
             "$formValidatorTable.$formFk" => $form->getID(),
          ],
       ]);
       $result = [];
       foreach ($rows as $row) {
+         $itemtype = $row['itemtype'];
+         if (!in_array($itemtype, [User::class, Group::class])) {
+            // Unsupported itemtype. DB inconsistency
+            continue;
+         }
          $item = new $itemtype();
-         if ($item->getFromDB($row['id'])) {
-            $result[$row['id']] = $item;
+         if ($item->getFromDB($row['items_id'])) {
+            $result[] = $item;
          }
       }
 

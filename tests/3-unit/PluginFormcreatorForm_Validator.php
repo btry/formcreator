@@ -67,11 +67,17 @@ class PluginFormcreatorForm_Validator extends CommonTestCase {
       $output = $instance->prepareInputForAdd([
          'uuid' => '0000',
       ]);
+      $this->boolean($output)->isFalse();
+
+      $output = $instance->prepareInputForAdd([
+         'uuid' => '0000',
+         'level' => '1',
+      ]);
 
       $this->array($output)->HasKey('uuid');
       $this->string($output['uuid'])->isEqualTo('0000');
 
-      $output = $instance->prepareInputForAdd([]);
+      $output = $instance->prepareInputForAdd(['level' => '1']);
 
       $this->array($output)->HasKey('uuid');
       $this->string($output['uuid']);
@@ -153,6 +159,61 @@ class PluginFormcreatorForm_Validator extends CommonTestCase {
       $formValidatorId = \PluginFormcreatorForm_Validator::import($linker, $input, $formId);
       $validId = \PluginFormcreatorForm_Validator::isNewId($formValidatorId);
       $this->boolean($validId)->isFalse();
+   }
 
+   public function testGetValidatorsForForm() {
+      $formFk = \PluginFormcreatorForm::getForeignKeyField();
+      $form = $this->getForm();
+
+      $user = new \User();
+      $user->getFromDB(2); // glpi
+      $this->boolean($user->isNewItem())->isFalse();
+      $formValidator = new \PluginFormcreatorForm_Validator();
+      $formValidator->add([
+         $formFk => $form->getID(),
+         'itemtype' => \User::getType(),
+         'items_id' => $user->getID(),
+         'level'    => 1,
+      ]);
+      $this->boolean($formValidator->isNewItem())->isFalse();
+
+      $group = $this->getGlpiCoreItem(\Group::getType());
+      $formValidator = new \PluginFormcreatorForm_Validator();
+      $formValidator->add([
+         $formFk => $form->getID(),
+         'itemtype' => \Group::getType(),
+         'items_id' => $group->getID(),
+         'level'    => 2,
+      ]);
+      $this->boolean($formValidator->isNewItem())->isFalse();
+
+      $output = $formValidator->getValidatorsForForm($form);
+
+      // Comparison function for test
+      $compare = function ($output, $expected) {
+         $found = 0;
+         $this->array($output)->hasSize(count($expected));
+         foreach ($output as $actualItem) {
+            foreach ($expected as $expectedItem) {
+               if ($actualItem->getType() == $expectedItem->getType()) {
+                  if ($actualItem->getID() == $expectedItem->getID()) {
+                     $found++;
+                  }
+               }
+            }
+         }
+         $this->integer($found)->isEqualTo(count($expected));
+      };
+
+      $expected = [$user, $group];
+      $compare($output, $expected);
+
+      $expected = [$user];
+      $output = $formValidator->getValidatorsForForm($form, ['itemtype' => \User::getType()]);
+      $compare($output, $expected);
+
+      $expected = [$group];
+      $output = $formValidator->getValidatorsForForm($form, ['itemtype' => \Group::getType()]);
+      $compare($output, $expected);
    }
 }

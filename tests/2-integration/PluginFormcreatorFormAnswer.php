@@ -160,7 +160,8 @@ class PluginFormcreatorFormAnswer extends CommonTestCase {
       $formValidator->add([
          'plugin_formcreator_forms_id' => $form->getID(),
          'itemtype' => \User::getType(),
-         'items_id' => 2 // user is glpi
+         'items_id' => 2, // user is glpi
+         'level'    => 1,
       ]);
       $this->boolean($formValidator->isNewItem())->isFalse();
 

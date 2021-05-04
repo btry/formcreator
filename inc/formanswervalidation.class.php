@@ -39,9 +39,9 @@ class PluginFormcreatorFormanswerValidation extends CommonDBTM
     * Get the current validation level of a formanswer
     *
     * @param PluginFormcreatorFormAnswer $formAnswer formanswer
-    * @return int
+    * @return null|int
     */
-   public static function getCurrentValidationLevel(PluginFormcreatorFormAnswer $formAnswer): int {
+   public static function getCurrentValidationLevel(PluginFormcreatorFormAnswer $formAnswer): ?int {
       global $DB;
 
       $formAnswerFk = PluginFormcreatorFormAnswer::getForeignKeyField();
@@ -49,18 +49,18 @@ class PluginFormcreatorFormanswerValidation extends CommonDBTM
          'SELECT' => ['MIN' => 'level as level'],
          'FROM' => self::getTable(),
          'WHERE' => [
-            $formAnswerFk => $formAnswer->fields['id'],
-            ['NOT' => [
+            $formAnswerFk => $formAnswer->getID(),
+            [
                'status' => PluginFormcreatorForm_Validator::VALIDATION_STATUS_WAITING,
-            ]],
+            ],
          ],
       ];
       $max = $DB->request($request)->next();
       if ($max === null || $max['level'] === null) {
-         return 1;
+         return null;
       }
 
-      return $max['level'] + 1;
+      return $max['level'];
    }
 
    /**
@@ -76,7 +76,7 @@ class PluginFormcreatorFormanswerValidation extends CommonDBTM
       $self = new self();
       $formAnswerFk = PluginFormcreatorFormAnswer::getForeignKeyField();
       $rows = $self->find([
-         $formAnswerFk => $formAnswer->fields['id'],
+         $formAnswerFk => $formAnswer->getID(),
          'level' => $level
       ]);
       foreach ($rows as $row) {

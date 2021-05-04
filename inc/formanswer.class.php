@@ -775,6 +775,18 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
       $form = new PluginFormcreatorForm();
       $form->getFromDB($input['plugin_formcreator_forms_id']);
 
+      if ($form->validationRequired()) {
+         $validValidators = PluginFormcreatorForm_Validator::getValidatorsForForm(
+            $form,
+            ['level' => 1]
+         );
+         if (count($validValidators) == 1) {
+            // Only one validator of level 1 allowed, then use it
+            $validator = array_pop($validValidators);
+            $input['formcreator_validator'] = $validator->getType() . '_' . $validator->getID();
+         }
+      }
+
       if (!$this->validateFormAnswer($input)) {
          // Validation of answers failed
          return false;
@@ -787,6 +799,12 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
       $groupIdValidator = 0;
       $usersIdValidator = 0;
       if ($form->validationRequired()) {
+         // find possible validators for level 1
+         $validValidators = PluginFormcreatorForm_Validator::getValidatorsForForm(
+            $form,
+            ['level' => 1]
+         );
+
          $status = self::STATUS_WAITING;
          if (!isset($input['formcreator_validator'])) {
             // Should trigger an error because no valdiator is slected
@@ -1328,6 +1346,7 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
       if ($checkValidator) {
          // Check required_validator
          if ($form->validationRequired() && empty($input['formcreator_validator'])) {
+            // Check if only one validator of level 1 is available
             Session::addMessageAfterRedirect(__('You must select validator!', 'formcreator'), false, ERROR);
             $this->isAnswersValid = false;
          }

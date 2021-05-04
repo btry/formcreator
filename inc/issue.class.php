@@ -405,7 +405,7 @@ class PluginFormcreatorIssue extends CommonDBTM {
       if (!Session::isCron()) {
          $hide_technician = \Entity::getUsedConfig(
             'anonymize_support_agents',
-            $_SESSION['glpiactive_entity']
+            Session::getActiveEntity()
          );
       }
 
