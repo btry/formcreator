@@ -154,8 +154,8 @@ class DropdownField extends CommonTestCase {
             'input' => [
                'dropdown_values' => \Location::class,
                'dropdown_default_value' => '0',
-               'show_ticket_categories_depth' => '5',
-               'show_ticket_categories_root' => '0',
+               'show_tree_depth' => '5',
+               'show_tree_root' => '0',
             ],
             'expected' => true,
          ],
@@ -170,8 +170,8 @@ class DropdownField extends CommonTestCase {
             'input' => [
                'dropdown_values' => \Location::class,
                'dropdown_default_value' => '0',
-               'show_ticket_categories_depth' => '5',
-               'show_ticket_categories_root' => '0',
+               'show_tree_depth' => '5',
+               'show_tree_root' => '0',
             ],
             'expected' => false,
          ],
@@ -187,8 +187,8 @@ class DropdownField extends CommonTestCase {
             'input' => [
                'dropdown_values' => \Location::class,
                'dropdown_default_value' => '42',
-               'show_ticket_categories_depth' => '5',
-               'show_ticket_categories_root' => '0',
+               'show_tree_depth' => '5',
+               'show_tree_root' => '0',
             ],
             'expected' => false,
          ],
@@ -204,8 +204,8 @@ class DropdownField extends CommonTestCase {
             'input' => [
                'dropdown_values' => \Location::class,
                'dropdown_default_value' => '42',
-               'show_ticket_categories_depth' => '5',
-               'show_ticket_categories_root' => '0',
+               'show_tree_depth' => '5',
+               'show_tree_root' => '0',
             ],
             'expected' => true,
          ],

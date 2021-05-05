@@ -213,7 +213,7 @@ class DropdownField extends PluginFormcreatorAbstractField
          'display'  => false,
          'comments' => false,
          'entity'   => $this->getEntityRestriction(),
-         //'entity_sons' => (bool) $form->isRecursive(),
+         'entity_sons' => (bool) $form->isRecursive(),
          'displaywith' => ['id'],
       ];
 
@@ -316,25 +316,25 @@ class DropdownField extends PluginFormcreatorAbstractField
 
       // Set specific root if defined (CommonTreeDropdown)
       $baseLevel = 0;
-      if (isset($decodedValues['show_ticket_categories_root'])
-         && (int) $decodedValues['show_ticket_categories_root'] > 0
+      if (isset($decodedValues['show_tree_root'])
+         && (int) $decodedValues['show_tree_root'] > 0
       ) {
          $sons = (new DBUtils)->getSonsOf(
             $itemtype::getTable(),
-            $decodedValues['show_ticket_categories_root']
+            $decodedValues['show_tree_root']
          );
          $dparams_cond_crit[$itemtype::getTable() . '.id'] = $sons;
          $rootItem = new $itemtype();
-         if ($rootItem->getFromDB($decodedValues['show_ticket_categories_root'])) {
+         if ($rootItem->getFromDB($decodedValues['show_tree_root'])) {
             $baseLevel = $rootItem->fields['level'];
          }
       }
 
       // Apply max depth if defined (CommonTreeDropdown)
-      if (isset($decodedValues['show_ticket_categories_depth'])
-         && $decodedValues['show_ticket_categories_depth'] > 0
+      if (isset($decodedValues['show_tree_depth'])
+         && $decodedValues['show_tree_depth'] > 0
       ) {
-         $dparams_cond_crit['level'] = ['<=', $decodedValues['show_ticket_categories_depth'] + $baseLevel];
+         $dparams_cond_crit['level'] = ['<=', $decodedValues['show_tree_depth'] + $baseLevel];
       }
 
       $dparams['condition'] = $dparams_cond_crit;
