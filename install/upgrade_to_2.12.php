@@ -36,8 +36,6 @@ class PluginFormcreatorUpgradeTo2_12 {
     * @param Migration $migration
     */
    public function upgrade(Migration $migration) {
-      global $DB;
-
       $this->migration = $migration;
 
       // Convert datetime to timestamp
@@ -167,5 +165,41 @@ class PluginFormcreatorUpgradeTo2_12 {
       $this->migration->addKey($table, ['itemtype', 'items_id'], 'item');
       $this->migration->dropField($table, 'users_id_validator');
       $this->migration->dropField($table, 'groups_id_validator');
+   }
+
+   public function migrateReferenceEntity() {
+      global $DB;
+
+      $questionTable = 'glpi_plugin_formcreator_questions';
+      $request = [
+         'SELECT' => ['id', 'default_values', 'values'],
+         'FROM' => $questionTable,
+         'WHERE' => ['fieldtype' => ['droprown']],
+      ];
+      foreach ($DB->request($request) as $row) {
+         $newAnswer = json_decode($row['values']);
+         if ($newAnswer === null) {
+            $newAnswer = ['itemtype' => $row['answer']];
+            $newAnswer['entity_restrict'] = 2;
+         } else {
+            if (!isset($newAnswer['entity_restrict'])) {
+               $newAnswer['entity_restrict'] = 'form';
+            }
+            switch ($newAnswer['entity_restrict']) {
+               case 'user':
+                  $newAnswer['entity_restrict'] = 1;
+                  break;
+               case 'both':
+                  $newAnswer['entity_restrict'] = 3;
+                  break;
+               default:
+                  $newAnswer['entity_restrict'] = 2;
+                  break;
+            }
+         }
+         $newAnswer = json_encode($newAnswer, JSON_OBJECT_AS_ARRAY);
+         $newAnswer = Toolbox::addslashes_deep($newAnswer);
+         $DB->update($questionTable, ['values' => $newAnswer], ['id' => $row['id']]);
+      }
    }
 }
