@@ -1084,4 +1084,70 @@ class PluginFormcreatorQuestion extends CommonTestCase {
       $instance->getFromDB($instance->getID());
       $this->integer((int) $instance->fields['required'])->isEqualTo(0);
    }
+
+   public function testCountItemsToImport() {
+      $input = [
+         '_conditions' => [['dummy condition input']],
+      ];
+
+      $output = \PluginFormcreatorQuestion::countItemsToImport($input);
+      $this->integer($output)->isEqualTo(2);
+
+      $input['_conditions'][] = [['otherdummy condition input']];
+      $output = \PluginFormcreatorQuestion::countItemsToImport($input);
+      $this->integer($output)->isEqualTo(3);
+   }
+
+   public function testGetQuestionsFromForm() {
+      $question1 = $this->getQuestion();
+
+      $sectionFk = \PluginFormcreatorSection::getForeignKeyField();
+
+      $form = new \PluginFormcreatorForm();
+      $form->getFromDBByQuestion($question1);
+      $formFk = \PluginFormcreatorForm::getForeignKeyField();
+      $section2 = $this->getSection([
+         $formFk => $form->getID(),
+      ]);
+
+      $question2 = $this->getQuestion([
+         $sectionFk => $section2->getID(),
+      ]);
+
+      $questions = $question1->getQuestionsFromForm($form->getID());
+      $this->array($questions)->hasSize(2);
+
+      $questionIds = [];
+      foreach ($questions as $item) {
+         $questionIds[] = $item->getID();
+      }
+      $expectedQuestionIds = [
+         $question1->getID(),
+         $question2->getID(),
+      ];
+
+      $this->array(array_intersect($questionIds, $expectedQuestionIds))->hasSize(2);
+   }
+
+   public function testGetQuestionsBySection() {
+      $section = $this->getSection();
+      $sectionFk = \PluginFormcreatorSection::getForeignKeyField();
+      $question1 = $this->getQuestion([
+         $sectionFk => $section->getID(),
+      ]);
+      $question2 = $this->getQuestion([
+         $sectionFk => $section->getID(),
+      ]);
+
+      $questions = $question1->getQuestionsFromSection($section->getID());
+      $questionIds = [];
+      foreach ($questions as $item) {
+         $questionIds[] = $item->getID();
+      }
+      $expectedQuestionIds = [
+         $question1->getID(),
+         $question2->getID(),
+      ];
+      $this->array(array_intersect($questionIds, $expectedQuestionIds))->hasSize(2);
+   }
 }
