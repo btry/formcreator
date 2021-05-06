@@ -873,6 +873,10 @@ class DropdownField extends PluginFormcreatorAbstractField
          $settings,
          ['display' => false, 'value' => $restrictionPolicy]
       );
+      $html .= '&nbsp;' . Html::showToolTip(
+         __('To respect the GLPI entity system, "Form" should be selected. Others settings will break the entity restrictions', 'formcreator'),
+         ['display' => false]
+      );
       $html .= '</td>';
       $html .= '</tr>';
       return $html;
