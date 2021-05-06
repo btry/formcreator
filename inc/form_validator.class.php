@@ -743,12 +743,12 @@ PluginFormcreatorExportableInterface
             $formTable => [
                'FKEY' => [
                   $formTable => 'id',
-                  $formValidatorTable => $formFk,
+                  $formValidatorTable => "$formFk",
                ],
             ],
          ],
          'WHERE' => [
-            $formFk => $form->getID(),
+            "$formTable.$formFk" => $form->getID(),
          ]
       ])->next();
       $maxLevel = $maxLevel === null ? 0 : $maxLevel['m'];
