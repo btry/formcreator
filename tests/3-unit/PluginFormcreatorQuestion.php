@@ -1069,4 +1069,19 @@ class PluginFormcreatorQuestion extends CommonTestCase {
       //if ($questionType == 'float') $this->dumpOnFailure($output);
       $this->array($output)->isIdenticalTo($expected);
    }
+
+   public function testSetRequired() {
+      $instance = $this->getQuestion();
+      $output = $instance->setRequired('1');
+      $this->boolean($output)->isTrue();
+
+      $instance->getFromDB($instance->getID());
+      $this->integer((int) $instance->fields['required'])->isEqualTo(1);
+
+      $output = $instance->setRequired('0');
+      $this->boolean($output)->isTrue();
+
+      $instance->getFromDB($instance->getID());
+      $this->integer((int) $instance->fields['required'])->isEqualTo(0);
+   }
 }

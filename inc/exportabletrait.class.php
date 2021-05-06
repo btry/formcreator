@@ -128,7 +128,7 @@ trait PluginFormcreatorExportableTrait
           return 1;
       }
 
-       $count = 0;
+      $count = 0;
       foreach ($subItems as $key => $itemtypes) {
          if (isset($input[$key])) {
             // force array of itemtypes

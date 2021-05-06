@@ -561,7 +561,7 @@ PluginFormcreatorTranslatableInterface
     * @param bool $isRequired
     */
    public function setRequired($isRequired) {
-      $this->update([
+      return $this->update([
          'id'           => $this->getID(),
          'required'     => $isRequired,
          '_skip_checks' => true,
