@@ -990,26 +990,26 @@ PluginFormcreatorTranslatableInterface
          throw new ExportFailureException(sprintf(__('Cannot export an empty object: %s', 'formcreator'), $this->getTypeName()));
       }
 
-      $question = $this->fields;
+      $export = $this->fields;
 
       // remove key and fk
       $sectionFk = PluginFormcreatorSection::getForeignKeyField();
-      unset($question[$sectionFk]);
+      unset($export[$sectionFk]);
 
       // get question conditions
-      $question['_conditions'] = [];
+      $export['_conditions'] = [];
       $condition = new PluginFormcreatorCondition();
       $all_conditions = $condition->getConditionsFromItem($this);
       foreach ($all_conditions as $condition) {
-         $question['_conditions'][] = $condition->export($remove_uuid);
+         $export['_conditions'][] = $condition->export($remove_uuid);
       }
 
       // get question parameters
-      $question['_parameters'] = [];
+      $export['_parameters'] = [];
       $this->loadField($this->fields['fieldtype']);
       $parameters = $this->field->getParameters();
       foreach ($parameters as $fieldname => $parameter) {
-         $question['_parameters'][$this->fields['fieldtype']][$fieldname] = $parameter->export($remove_uuid);
+         $export['_parameters'][$this->fields['fieldtype']][$fieldname] = $parameter->export($remove_uuid);
       }
 
       // remove ID or UUID
@@ -1017,9 +1017,9 @@ PluginFormcreatorTranslatableInterface
       if ($remove_uuid) {
          $idToRemove = 'uuid';
       }
-      unset($question[$idToRemove]);
+      unset($export[$idToRemove]);
 
-      return $question;
+      return $export;
    }
 
    /**

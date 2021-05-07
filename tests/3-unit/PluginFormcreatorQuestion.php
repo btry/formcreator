@@ -128,7 +128,7 @@ class PluginFormcreatorQuestion extends CommonTestCase {
       $newQuestion_id = $question->duplicate();
       $this->integer($newQuestion_id)->isGreaterThan(0);
 
-      //get cloned section
+      //get cloned question
       $new_question  = new \PluginFormcreatorQuestion;
       $new_question->getFromDB($newQuestion_id);
 

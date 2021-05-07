@@ -195,7 +195,30 @@ class PluginFormcreatorForm_language extends CommonTestCase
       $form->getFromDBByQuestion($question);
       $this->boolean($form->isNewItem())->isFalse();
 
+      $instance = $this->newTestedInstance();
+      $instance->add([
+         'plugin_formcreator_forms_id' => $form->getID(),
+         'comment' => 'foo',
+         'name' => 'en_US',
+      ]);
+
+      // Find a string to translate
+      $strings = $form->getTranslatableStrings([
+         'language' => $instance->fields['name'],
+      ]);
+      $stringId = reset($strings['id']);
+      $stringValue= $strings['type'];
+
+      $translation = new \PluginFormcreatorTranslation();
+      $translation->add([
+         'plugin_formcreator_forms_languages_id' => $instance->getID(),
+         'plugin_formcreator_forms_id' => $form->getID(),
+         'id' => '',
+         'value' => 'translated'
+      ]);
+
       // TODO : test incomplete
+
    }
 
    public function testImport() {
