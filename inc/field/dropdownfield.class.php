@@ -543,7 +543,7 @@ class DropdownField extends PluginFormcreatorAbstractField
       // Params for entity restrictables itemtypes
       $itemtype = $input['dropdown_values'];
       if ((new $itemtype)->isEntityAssign()) {
-         $input['values']['entity_restrict'] = $input['entity_restrict'];
+         $input['values']['entity_restrict'] = $input['entity_restrict'] ?? self::ENTITY_RESTRICT_FORM;
       }
       unset($input['entity_restrict']);
 
@@ -852,8 +852,7 @@ class DropdownField extends PluginFormcreatorAbstractField
     * get HTML code to show entity restriction policy
     * @return string HTML code
     */
-   protected function getEntityRestrictSettiing()
-   {
+   protected function getEntityRestrictSettiing() {
       $restrictionPolicy = self::ENTITY_RESTRICT_FORM;
       $decodedValues = json_decode($this->question->fields['values'], JSON_OBJECT_AS_ARRAY);
       if (isset($decodedValues['entity_restrict'])) {
@@ -887,8 +886,7 @@ class DropdownField extends PluginFormcreatorAbstractField
     *
     * @return void
     */
-   protected function getEntityRestriction()
-   {
+   protected function getEntityRestriction() {
       $decodedValues = json_decode($this->question->fields['values'], JSON_OBJECT_AS_ARRAY);
       $restrictionPolicy = self::ENTITY_RESTRICT_FORM;
       if (isset($decodedValues['entity_restrict'])) {

@@ -193,7 +193,7 @@ class PluginFormcreatorSection extends CommonTestCase {
          'uuid'       => $uuid,
       ];
 
-      $linker = new \PluginFormcreatorLinker ();
+      $linker = new \PluginFormcreatorLinker();
       $sectionId = \PluginFormcreatorSection::import($linker, $input, $form->getID());
       $this->integer($sectionId)->isGreaterThan(0);
 

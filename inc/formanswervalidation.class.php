@@ -130,7 +130,7 @@ class PluginFormcreatorFormanswerValidation extends CommonDBTM
          if ($acceptedRatio >= $validationPercent) {
             // We have reached the acceptation threshold
             return PluginFormcreatorForm_Validator::VALIDATION_STATUS_ACCEPTED;
-         } else  if ($refusedRatio + $validationPercent > 100) {
+         } else if ($refusedRatio + $validationPercent > 100) {
             // We can no longer reach the acceptation threshold
             return PluginFormcreatorForm_Validator::VALIDATION_STATUS_REFUSED;
          }

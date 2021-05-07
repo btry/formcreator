@@ -63,6 +63,7 @@ class DropdownField extends CommonTestCase {
                   'itemtype' => \Location::class,
                   'show_tree_depth' => '5',
                   'show_tree_root' => '0',
+                  'entity_restrict' => \GlpiPlugin\Formcreator\Field\DropdownField::ENTITY_RESTRICT_FORM,
                ]),
                'default_values'  => '',
             ]
@@ -82,6 +83,7 @@ class DropdownField extends CommonTestCase {
                   'show_ticket_categories' => '2',
                   'show_tree_depth' => '3',
                   'show_tree_root'  => '',
+                  'entity_restrict' => \GlpiPlugin\Formcreator\Field\DropdownField::ENTITY_RESTRICT_FORM,
                ]),
                'default_values'  => '',
             ]
