@@ -102,7 +102,6 @@ class PluginFormcreatorIssue extends CommonDBTM {
                'requester_id        as requester_id',
                'comment             as comment'
             ],
-            new QueryExpression("IF(`$formAnswerTable`.`status` = '" . PluginFormcreatorFormAnswer::STATUS_ACCEPTED . "', '100', '0') as `validation_percent`"),
          ],
          'DISTINCT' => true,
          'FROM' => $formAnswerTable,
@@ -157,7 +156,6 @@ class PluginFormcreatorIssue extends CommonDBTM {
             ],
             new QueryExpression('0                       as is_recursive'),
             "$ticketUserTable.users_id                   as requester_id",
-            'validation_percent                          as validation_percent',
             "$ticketTable.content                        as comment",
          ],
          'DISTINCT' => true,
