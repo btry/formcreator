@@ -1781,27 +1781,34 @@ PluginFormcreatorTranslatableInterface
             $input['_entity']
          );
          // Check rights on the destination entity of the form
-         if (!$entity->isNewItem() && $entity->canUpdateItem()) {
-            $entityId = $entity->getID();
-         } else {
-            if ($itemId !== false) {
-               // The form is in an entity where we don't have UPDATE right
+         if (!$entity->isNewItem()) {
+            if (!$entity->canUpdateItem()) {
+               if ($itemId !== false) {
+                  // The form is in an entity where we don't have UPDATE right
+                  Session::addMessageAfterRedirect(
+                     sprintf(__('The form %1$s already exists and is in an unmodifiable entity.', 'formcreator'), $input['name']),
+                     false,
+                     WARNING
+                  );
+                  throw new ImportFailureException('Failed to add or update the item');
+               }
+               // The entity us not updatable
                Session::addMessageAfterRedirect(
-                  sprintf(__('The form %1$s already exists and is in an unmodifiable entity.', 'formcreator'), $input['name']),
-                  false,
-                  WARNING
-               );
-               throw new ImportFailureException('Failed to add or update the item');
-            } else {
-               // The form is in an entity which does not exists yet
-               Session::addMessageAfterRedirect(
-                  sprintf(__('The entity %1$s is required for the form %2$s.', 'formcreator'), $input['_entity'], $input['name']),
+                  sprintf(__('You don\'t have right to update the entity %1$s.', 'formcreator'), $input['_entity']),
                   false,
                   WARNING
                );
                throw new ImportFailureException('Failed to add or update the item');
             }
+            $entityId = $entity->getID();
          }
+         // The form is in an entity which does not exists yet
+         Session::addMessageAfterRedirect(
+            sprintf(__('The entity %1$s is required for the form %2$s.', 'formcreator'), $input['_entity'], $input['name']),
+            false,
+            WARNING
+         );
+         throw new ImportFailureException('Failed to add or update the item');
       }
       $input[$entityFk] = $entityId;
 
