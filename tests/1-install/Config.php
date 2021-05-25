@@ -71,7 +71,7 @@ class Config extends CommonTestCase {
 
       $pluginName = TEST_PLUGIN_NAME;
 
-      $this->given(self::setupGLPIFramework())
+      $this->given($this->setupGLPIFramework())
            ->and($this->boolean($DB->connected)->isTrue());
 
       //Drop plugin configuration if exists
