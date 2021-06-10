@@ -1463,6 +1463,7 @@ function plugin_formcreator_changeDropdownItemtype(rand) {
             itemtype: dropdown_type,
             root: $("#commonTreeDropdownRoot").val(),
             maxDepth: $("#commonTreeDropdownMaxDepth").val(),
+            selectableRoot: $("#commonTreeDropdownSelectableRoot").val(),
          },
       }).done(function(response) {
          $('.plugin_formcreator_dropdown').html(response);
@@ -1528,6 +1529,7 @@ function plugin_formcreator_changeGlpiObjectItemType() {
          itemtype: glpi_object,
          root: $("#commonTreeDropdownRoot").val(),
          maxDepth: $("#commonTreeDropdownMaxDepth").val(),
+         selectableRoot: $("#commonTreeDropdownSelectableRoot").val(),
       },
    }).done(function(response) {
       $('.plugin_formcreator_dropdown').html(response);
