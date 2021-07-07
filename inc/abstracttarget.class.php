@@ -706,11 +706,10 @@ PluginFormcreatorTranslatableInterface
                $requester_id = $formanswer->fields['requester_id'];
 
                $user = new User;
-               $users = $user->find(['id' => $requester_id]);
-               if (!empty($users)) {
-                  $userIds = [$users[$requester_id]['users_id_supervisor']];
+               $user = User::getById($requester_id);
+               if ($user !== false) {
+                  $userIds = [$user->fields['users_id_supervisor']];
                }
-               // $userIds = [$formanswer->fields['requester_id']];
                break;
          }
          $notify = $actor['use_notification'];
