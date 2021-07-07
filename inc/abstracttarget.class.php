@@ -707,7 +707,7 @@ PluginFormcreatorTranslatableInterface
 
                $user = new User;
                $user = User::getById($requester_id);
-               if ($user !== false) {
+               if (is_object($user)) {
                   $userIds = [$user->fields['users_id_supervisor']];
                }
                break;
