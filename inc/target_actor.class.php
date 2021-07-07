@@ -128,6 +128,7 @@ class PluginFormcreatorTarget_Actor extends CommonDBChild implements PluginFormc
             case self::ACTOR_TYPE_QUESTION_SUPPLIER :
             case self::ACTOR_TYPE_GROUP_FROM_OBJECT :
             case self::ACTOR_TYPE_TECH_GROUP_FROM_OBJECT :
+               /** @var PluginFormcreatorQuestion $question */
                $question = $linker->getObject($input['actor_value'], PluginFormcreatorQuestion::class);
                if ($question === false) {
                   $linker->postpone($input[$idKey], $item->getType(), $input, $containerId);
