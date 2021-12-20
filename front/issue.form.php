@@ -53,10 +53,6 @@ if (!plugin_formcreator_replaceHelpdesk()) {
    Html::redirect($CFG_GLPI['root_doc']."/front/helpdesk.public.php");
 }
 
-// force layout of glpi
-PluginFormcreatorCommon::saveLayout();
-$_SESSION['glpilayout'] = "lefttab";
-
 /** @var PluginFormcreatorIssue $issue */
 $issue = PluginFormcreatorIssue::getById((int) $_REQUEST['id']);
 
@@ -100,5 +96,3 @@ if (Session::getCurrentInterface() == "helpdesk") {
 } else {
    Html::footer();
 }
-
-PluginFormcreatorCommon::restoreLayout();

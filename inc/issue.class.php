@@ -398,10 +398,6 @@ class PluginFormcreatorIssue extends CommonDBTM {
       }
       unset($options['_item']);
 
-      // force recall of ticket in layout
-      PluginFormcreatorCommon::saveLayout();
-      $_SESSION['glpilayout'] = "lefttab";
-
       if ($item instanceof Ticket) {
          //Tickets without form associated or single ticket for an answer
          $satisfaction = new TicketSatisfaction();
@@ -430,9 +426,6 @@ class PluginFormcreatorIssue extends CommonDBTM {
          $item->showTabsContent($options);
          echo '</div>';
       }
-
-      // restore layout
-      PluginFormcreatorCommon::restoreLayout();
    }
 
    /**
