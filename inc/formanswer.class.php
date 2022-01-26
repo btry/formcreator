@@ -915,7 +915,8 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
       }
 
       $formFk = PluginFormcreatorForm::getForeignKeyField();
-      $form = PluginFormcreatorForm::getById($formId ?? $this->fields[$formFk]);
+      $form = PluginFormcreatorCommon::getForm();
+      $form->getFromDB($formId ?? $this->fields[$formFk]);
       if ($form === false) {
          return null;
       }
@@ -1040,7 +1041,7 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
       /** @var PluginFormcreatorAbstractField $field */
       foreach ($this->getQuestionFields($formId) as $questionId => $field) {
          $field->moveUploads();
-         $answer = new PluginFormcreatorAnswer();
+         $answer = PluginFormcreatorCommon::getFormAnswer();
          $answer->add([
             'plugin_formcreator_formanswers_id'  => $formAnswerId,
             'plugin_formcreator_questions_id'    => $questionId,
@@ -1087,7 +1088,7 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
                continue;
             }
             $field->moveUploads();
-            $answer = new PluginFormcreatorAnswer();
+            $answer = PluginFormcreatorCommon::getFormAnswer();
             $answer->getFromDBByCrit([
                'plugin_formcreator_formanswers_id' => $formAnswerId,
                'plugin_formcreator_questions_id' => $questionId,
@@ -1741,10 +1742,6 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
     * @return integer
     */
    protected static function getValidationStatus(PluginFormcreatorFormAnswer $formAnswer): int {
-      if (Plugin::isPluginActive('advform')) {
-         return PluginAdvformFormAnswer::getValidationStatus($formAnswer);
-      }
-
       return isset($formAnswer->input['refuse_formanswer'])
              ? PluginFormcreatorForm_Validator::VALIDATION_STATUS_REFUSED
              : PluginFormcreatorForm_Validator::VALIDATION_STATUS_ACCEPTED;

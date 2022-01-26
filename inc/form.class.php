@@ -1051,8 +1051,9 @@ PluginFormcreatorTranslatableInterface
                   $status = $formAnswer['status'];
             }
             $status = CommonITILOBject::getStatusClass($status);
+            $formAnswerUrl = PluginFormcreatorCommon::getFormAnswer()->getFormURLWithID($formAnswer['id']);
             echo '<li data-itemtype="PluginFormcreatorFormanswer" data-id="' . $formAnswer['id'] . '">';
-            echo '<i class="'.$status.'"></i><a href="formanswer.form.php?id='.$formAnswer['id'].'">'.$formAnswer['name'].'</a>';
+            echo '<i class="'.$status.'"></i><a href="'.$formAnswerUrl.'">'.$formAnswer['name'].'</a>';
             echo '<span class="plugin_formcreator_date">'.Html::convDateTime($formAnswer['request_date']).'</span>';
             echo '</li>';
          }
@@ -1102,8 +1103,9 @@ PluginFormcreatorTranslatableInterface
                   $status = $formAnswer['status'];
             }
             $status = CommonITILOBject::getStatusClass($status);
+            $formAnswerUrl = PluginFormcreatorCommon::getFormAnswer()->getFormURLWithID($formAnswer['id']);
             echo '<li data-itemtype="PluginFormcreatorFormanswer" data-id="' . $formAnswer['id'] . '">';
-            echo '<i class="'.$status.'"></i><a href="formanswer.form.php?id='.$formAnswer['id'].'">'.$formAnswer['name'].'</a>';
+            echo '<i class="'.$status.'"></i><a href="'.$formAnswerUrl.'">'.$formAnswer['name'].'</a>';
             echo '<span class="plugin_formcreator_date">'.Html::convDateTime($formAnswer['request_date']).'</span>';
             echo '</li>';
          }
@@ -1157,11 +1159,10 @@ PluginFormcreatorTranslatableInterface
 
       $formName = 'plugin_formcreator_form';
       $formId = $this->getID();
-      self::getFormURL();
       echo '<div class="asset">';
       echo '<form name="' . $formName . '" method="post" role="form" enctype="multipart/form-data"'
       . ' class="plugin_formcreator_form"'
-      . ' action="' . self::getFormURL() . '"'
+      . ' action="' . static::getFormURL() . '"'
       . ' id="plugin_formcreator_form"'
       . ' data-itemtype="PluginFormcreatorForm"'
       . ' data-id="' . $formId . '"'
@@ -1555,7 +1556,7 @@ PluginFormcreatorTranslatableInterface
       if ($new_form_id === false) {
          return false;
       }
-      $newForm = new self();
+      $newForm = PluginFormcreatorCommon::getForm();
       $newForm->getFromDB($new_form_id);
       $newName = $newForm->fields['name'] . ' [' . __('Duplicate', 'formcreator') . ']';
       $newForm->update([
@@ -1712,7 +1713,7 @@ PluginFormcreatorTranslatableInterface
                   ]),
                ],
             ],
-         ] + (new DbUtils())->getEntitiesRestrictCriteria($formTable, '', '', (new self())->maybeRecursive()),
+         ] + (new DbUtils())->getEntitiesRestrictCriteria($formTable, '', '', (PluginFormcreatorCommon::getForm())->maybeRecursive()),
 
       ]);
       $result->rewind();
@@ -1750,7 +1751,7 @@ PluginFormcreatorTranslatableInterface
          '_profiles'     => PluginFormcreatorForm_Profile::class,
          '_sections'     => PluginFormcreatorSection::class,
          '_conditions'   => PluginFormcreatorCondition::class,
-         '_targets'      => (new self())->getTargetTypes(),
+         '_targets'      => (PluginFormcreatorCommon::getForm())->getTargetTypes(),
          '_validators'   => PluginFormcreatorForm_Validator::class,
          '_translations' => PluginFormcreatorForm_Language::class,
       ];
@@ -1943,7 +1944,9 @@ PluginFormcreatorTranslatableInterface
          throw new ImportFailureException(sprintf('UUID or ID is mandatory for %1$s', self::getTypeName(1)));
       }
 
-      $item = new self();
+      $input['_skip_checks'] = true;
+
+      $item = PluginFormcreatorCommon::getForm();
       // Find an existing form to update, only if an UUID is available
       $itemId = false;
       /** @var string $idKey key to use as ID (id or uuid) */
@@ -2040,7 +2043,7 @@ PluginFormcreatorTranslatableInterface
          '_profiles'     => PluginFormcreatorForm_Profile::class,
          '_sections'     => PluginFormcreatorSection::class,
          '_conditions'   => PluginFormcreatorCondition::class,
-         '_targets'      => (new self())->getTargetTypes(),
+         '_targets'      => (PluginFormcreatorCommon::getForm())->getTargetTypes(),
          '_validators'   => PluginFormcreatorForm_Validator::class,
          '_translations' => PluginFormcreatorForm_Language::class,
       ];
@@ -2055,7 +2058,7 @@ PluginFormcreatorTranslatableInterface
          '_profiles'   => PluginFormcreatorForm_Profile::class,
          '_sections'   => PluginFormcreatorSection::class,
          '_conditions' => PluginFormcreatorCondition::class,
-         '_targets'    => (new self())->getTargetTypes(),
+         '_targets'    => (PluginFormcreatorCommon::getForm())->getTargetTypes(),
          '_validators' => PluginFormcreatorForm_Validator::class,
       ];
       return 1 + self::countChildren($input, $subItems);
