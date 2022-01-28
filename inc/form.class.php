@@ -2688,7 +2688,27 @@ PluginFormcreatorTranslatableInterface
     * @return bool true if valdiation required, false otherwise
     */
    public function validationRequired(): bool {
-      return $this->fields['validation_required'] != self::VALIDATION_NONE;
+      if ($this->fields['validation_required'] == self::VALIDATION_NONE) {
+         return false;
+      }
+      switch ($this->fields['validation_required']) {
+         case self::VALIDATION_NONE:
+            return false;
+            break;
+
+         case self::VALIDATION_USER:
+            $itemtype = User::getType();
+            break;
+
+         case self::VALIDATION_GROUP:
+            $itemtype = Group::getType();
+            break;
+      }
+      $validatorsCount = (new DbUtils())->countElementsInTable([
+         PluginFormcreatorForm::getForeignKeyField() => $this->getID(),
+         'itemtype' => $itemtype,
+      ]);
+      return $validatorsCount > 0;
    }
 
    /**
