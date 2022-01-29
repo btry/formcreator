@@ -156,6 +156,10 @@ function plugin_init_formcreator() {
             break;
          }
       }
+
+      if (strpos($_SERVER['REQUEST_URI'], 'issue.form.php') !== false) {
+         $PLUGIN_HOOKS['add_css']['formcreator'][] = "css/print_form.css";
+      }
    }
 
    // Html::requireJs('gridstack');
