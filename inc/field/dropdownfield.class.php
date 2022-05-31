@@ -57,6 +57,7 @@ use OLA;
 use QuerySubQuery;
 use QueryUnion;
 use GlpiPlugin\Formcreator\Exception\ComparisonException;
+use GlpiPlugin\Formcreator\Filter\ItilCategoryFilter;
 use Glpi\Application\View\TemplateRenderer;
 class DropdownField extends PluginFormcreatorAbstractField
 {
@@ -86,7 +87,7 @@ class DropdownField extends PluginFormcreatorAbstractField
       $this->question->fields['_tree_root'] = $decodedValues['show_tree_root'] ?? Dropdown::EMPTY_VALUE;
       $this->question->fields['_tree_root_selectable'] = $decodedValues['selectable_tree_root'] ?? '0';
       $this->question->fields['_tree_max_depth'] = $decodedValues['show_tree_depth'] ?? Dropdown::EMPTY_VALUE;
-      $this->question->fields['_show_ticket_categories'] = isset($decodedValues['show_ticket_categories']) ? $decodedValues['show_ticket_categories'] : 'both';
+      $this->question->fields['_show_ticket_categories'] = isset($decodedValues['show_ticket_categories']) ? $decodedValues['show_ticket_categories'] : ItilCategoryFilter::ITIL_CATEGORY_FILTER_BOTH;
       $this->question->fields['_entity_restrict'] = $decodedValues['entity_restrict'] ?? self::ENTITY_RESTRICT_FORM;
       $this->question->fields['_is_tree'] = '0';
       $this->question->fields['_is_entity_restrict'] = '0';
@@ -150,7 +151,7 @@ class DropdownField extends PluginFormcreatorAbstractField
             $dparams['right'] = 'all';
             $currentEntity = Session::getActiveEntity();
             $ancestorEntities = getAncestorsOf(Entity::getTable(), $currentEntity);
-            $decodedValues['entity_restrict'] = $decodedValues['entity_restrict'] ?? 2;
+            $decodedValues['entity_restrict'] = $decodedValues['entity_restrict'] ?? self::ENTITY_RESTRICT_FORM;
             switch ($decodedValues['entity_restrict']) {
                case self::ENTITY_RESTRICT_FORM:
                   $form = PluginFormcreatorForm::getByItem($this->getQuestion());
@@ -185,24 +186,24 @@ class DropdownField extends PluginFormcreatorAbstractField
             if (Session::getCurrentInterface() == 'helpdesk') {
                $dparams_cond_crit['is_helpdeskvisible'] = 1;
             }
-            $decodedValues['show_ticket_categories'] = $decodedValues['show_ticket_categories'] ?? 'all';
+            $decodedValues['show_ticket_categories'] = $decodedValues['show_ticket_categories'] ?? ItilCategoryFilter::ITIL_CATEGORY_FILTER_ALL;
             switch ($decodedValues['show_ticket_categories']) {
-               case 'request':
+               case ItilCategoryFilter::ITIL_CATEGORY_FILTER_REQUEST :
                   $dparams_cond_crit['is_request'] = 1;
                   break;
-               case 'incident':
+               case ItilCategoryFilter::ITIL_CATEGORY_FILTER_INCIDENT:
                   $dparams_cond_crit['is_incident'] = 1;
                   break;
-               case 'both':
+               case ItilCategoryFilter::ITIL_CATEGORY_FILTER_BOTH:
                   $dparams_cond_crit['OR'] = [
                      'is_incident' => 1,
                      'is_request'  => 1,
                   ];
                   break;
-               case 'change':
+               case ItilCategoryFilter::ITIL_CATEGORY_FILTER_CHANGE:
                   $dparams_cond_crit['is_change'] = 1;
                   break;
-               case 'all':
+               case ItilCategoryFilter::ITIL_CATEGORY_FILTER_ALL:
                   $dparams_cond_crit['OR'] = [
                      'is_change'   => 1,
                      'is_incident' => 1,
@@ -501,10 +502,7 @@ class DropdownField extends PluginFormcreatorAbstractField
          // Specific param for ITILCategory
          if ($itemtype == ITILCategory::class) {
             // Set default for depth setting
-            if (!isset($input['show_ticket_categories'])) {
-               $input['show_ticket_categories'] = 'all';
-            }
-            $input['values']['show_ticket_categories'] = $input['show_ticket_categories'];
+            $input['values']['show_ticket_categories'] = $input['show_ticket_categories'] ?? ItilCategoryFilter::ITIL_CATEGORY_FILTER_ALL;
          }
 
          // Set default for depth setting
