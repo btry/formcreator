@@ -43,6 +43,9 @@ jobs:
         php-versions: [7.4, 8.1]
         env:
           - { GLPI_BRANCH: 10.0/bugfixes }
+        include:
+          - php-versions: 8.1
+            env: {GLPI_BRANCH: 10.0/bugfixes, GLPI_PACKAGE_URL: "https://nightly.glpi-project.org/glpi/main.tar.gz"}
     services:
       db:
         image: mariadb:10.2

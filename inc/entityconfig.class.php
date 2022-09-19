@@ -69,6 +69,8 @@ class PluginFormcreatorEntityconfig extends CommonDBTM {
    const CONFIG_UI_FORM_MASONRY = 0;
    const CONFIG_UI_FORM_UNIFORM_HEIGHT = 1;
 
+   const CONFIG_LEFT_MENU_UNFOLDED = 0;
+   const CONFIG_LEFT_MENU_FOLDED = 1;
 
    /**
     * @var bool $dohistory maintain history
@@ -155,6 +157,14 @@ class PluginFormcreatorEntityconfig extends CommonDBTM {
          self::CONFIG_PARENT                 => __('Inheritance of the parent entity'),
          self::CONFIG_UI_FORM_MASONRY        => __('Variable height', 'formcreator'),
          self::CONFIG_UI_FORM_UNIFORM_HEIGHT => __('Uniform height', 'formcreator'),
+      ];
+   }
+
+   public static function getEnumLeftMenuVisibility() : array {
+      return [
+         self::CONFIG_PARENT               => __('Inheritance of the parent entity'),
+         self::CONFIG_LEFT_MENU_FOLDED     => __('Folded', 'formcreator'),
+         self::CONFIG_LEFT_MENU_UNFOLDED   => __('Unfolded', 'formcreator'),
       ];
    }
 
@@ -387,6 +397,22 @@ class PluginFormcreatorEntityconfig extends CommonDBTM {
       Dropdown::showFromArray('tile_design', $elements, ['value' => $this->fields['tile_design']]);
       if ($this->fields['tile_design'] == self::CONFIG_PARENT) {
          $tid = self::getUsedConfig('tile_design', $entityId);
+         echo '<br>';
+         Entity::inheritedValue($elements[$tid], true);
+      }
+      echo '</td></tr>';
+
+      // left menu visibility (foelded / unfolded)
+      $elements = self::getEnumLeftMenuVisibility();
+      if ($entityId == 0) {
+         unset($elements[self::CONFIG_PARENT]);
+      }
+      echo "<tr class='tab_bg_1'>";
+      echo "<td>".__('Menu visibility (only for vertical menu)', 'formcreator')."</td>";
+      echo "<td>";
+      Dropdown::showFromArray('is_folded_menu', $elements, ['value' => $this->fields['is_folded_menu']]);
+      if ($this->fields['is_folded_menu'] == self::CONFIG_PARENT) {
+         $tid = self::getUsedConfig('is_folded_menu', $entityId);
          echo '<br>';
          Entity::inheritedValue($elements[$tid], true);
       }
