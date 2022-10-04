@@ -545,6 +545,7 @@ class PluginFormcreatorForm extends CommonTestCase {
          'users',
          'groups',
          'validation_percent',
+         'plugin_formcreator_forms_id',
       ];
       $extraFields = [
          '_entity',
@@ -697,6 +698,7 @@ class PluginFormcreatorForm extends CommonTestCase {
          'usage_count' => '0',
          'is_default' => '0',
          'show_rule'  => '1',
+         'plugin_formcreator_forms_id' => '',
          'formanswer_name' => $this->getUniqueString(),
          'uuid' => $uuid,
       ];
