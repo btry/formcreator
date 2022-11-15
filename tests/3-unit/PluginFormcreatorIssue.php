@@ -31,13 +31,14 @@
 
 namespace tests\units;
 use GlpiPlugin\Formcreator\Tests\CommonTestCase;
+use PluginFormcreatorForm_Validator;
 use Ticket;
 use PluginFormcreatorFormAnswer;
 use RuleAction;
-use User;
 use Rule;
 use RuleCriteria;
 use CommonITILObject;
+use User;
 
 class PluginFormcreatorIssue extends CommonTestCase {
    public function beforeTestMethod($method) {
@@ -312,10 +313,14 @@ class PluginFormcreatorIssue extends CommonTestCase {
    }
 
    public function providerGetSyncIssuesRequest_formanswerUnderValidation() {
-      $form = $this->getForm([
-         'validation_required' => \PluginFormcreatorForm::VALIDATION_USER,
-         '_validator_users' => [4] // tech
+      $form = $this->getForm();
+      $formValidator = new PluginFormcreatorForm_Validator();
+      $formValidator->add([
+         'plugin_formcreator_forms_id' => $form->getID(),
+         'itemtype'                    => User::class,
+         'users_id'                    => 4 // User Tech
       ]);
+      $this->boolean($formValidator->isNewItem())->isFalse();
 
       $formAnswer = new \PluginFormcreatorFormAnswer();
       $formAnswer->add([
