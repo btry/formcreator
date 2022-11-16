@@ -1702,7 +1702,6 @@ PluginFormcreatorTranslatableInterface
          $linker->initProgressBar();
 
          $success = true;
-         $linker->reset();
          foreach ($forms_toimport['forms'] as $form) {
             $linker->reset();
             set_time_limit(30);
