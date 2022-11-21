@@ -139,6 +139,11 @@ PluginFormcreatorExportableInterface
          case PluginFormcreatorSupervisorValidator::class:
             $input['items_id'] = 0;
             break;
+
+         default:
+            Session::addMessageAfterRedirect(__('Invalid validator type.', 'formcreator'), false, ERROR);
+            return [];
+            break;
       }
 
       // generate a unique id
