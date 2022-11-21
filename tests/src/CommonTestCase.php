@@ -65,6 +65,7 @@ abstract class CommonTestCase extends atoum
       $this->restoreDebug();
       $_SESSION['MESSAGE_AFTER_REDIRECT'] = [];
       $this->setupGLPIFramework();
+      $this->boolean($result)->isTrue();
 
       return $result;
    }
