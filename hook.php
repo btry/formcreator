@@ -127,6 +127,41 @@ function plugin_formcreator_addDefaultJoin($itemtype, $ref_table, &$already_link
                0,
                $issueSo[16]['joinparams']
             );
+            if (true || version_compare(GLPI_VERSION, '10.1') >= 0) {
+               // Forced to true for backport in GLPI 10.0 of substitutes
+               $join .= Search::addLeftJoin(
+                  $itemtype,
+                  $ref_table,
+                  $already_link_tables,
+                  $issueSo[30]['table'],
+                  'users_id_substitute',
+                  0,
+                  0,
+                  $issueSo[30]['joinparams']
+               );
+               $join .= Search::addLeftJoin(
+                  $itemtype,
+                  $ref_table,
+                  $already_link_tables,
+                  $issueSo[32]['table'],
+                  'users_id_substitute',
+                  0,
+                  0,
+                  $issueSo[32]['joinparams']
+               );
+            }
+            if (version_compare(GLPI_VERSION, '10.1') >= 0) {
+               $join .= Search::addLeftJoin(
+                  $itemtype,
+                  $ref_table,
+                  $already_link_tables,
+                  $issueSo[31]['table'],
+                  'users_id_substitute',
+                  0,
+                  0,
+                  $issueSo[31]['joinparams']
+               );
+            }
          }
          break;
 
@@ -189,6 +224,10 @@ function plugin_formcreator_addDefaultWhere($itemtype) {
          // the current user is a substitute of the validator of the issue
          $condition .= ' OR ';
          $complexJoinId = Search::computeComplexJoinID(Search::getOptions($itemtype)[30]['joinparams']);
+         $condition .= "`glpi_users_users_id_substitute_$complexJoinId`.`id` = '$currentUser'";
+         // Validator substitute for formanswer validator
+         $condition .= ' OR ';
+         $complexJoinId = Search::computeComplexJoinID(Search::getOptions($itemtype)[32]['joinparams']);
          $condition .= "`glpi_users_users_id_substitute_$complexJoinId`.`id` = '$currentUser'";
          if (version_compare(GLPI_VERSION, '10.1') >= 0) {
             // the current user is a substitute of a member of a group validator of the issue
