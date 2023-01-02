@@ -1163,7 +1163,7 @@ PluginFormcreatorTranslatableInterface
 
       //Check form redirect
       $used_id = [];
-      if ($input['plugin_formcreator_forms_id'] > 0) {
+      if (($input['plugin_formcreator_forms_id'] ?? 0) > 0) {
          $used_id[] = $input['id'];
          $used_id[] = $input['plugin_formcreator_forms_id'];
          $loop = self::checkLoop($input['plugin_formcreator_forms_id'], $used_id);
@@ -1539,16 +1539,17 @@ PluginFormcreatorTranslatableInterface
       }
 
       // replace form next id
+      $export['_plugin_formcreator_form'] = '';
       if ($export['plugin_formcreator_forms_id'] > 0) {
-         $nextForm = new self();
-         $export['plugin_formcreator_forms_id'] = '';
-         if ($nextForm->getFromDB($export['plugin_formcreator_forms_id'])) {
-            $export['plugin_formcreator_forms_id'] = $nextForm->fields['uuid'];
+         $nextForm = self::getById($export['plugin_formcreator_forms_id']);
+         if ($nextForm instanceof self) {
+            $export['_plugin_formcreator_form'] = $nextForm->fields['uuid'];
          }
       }
 
       // remove non needed keys
       unset($export['plugin_formcreator_categories_id'],
+            $export['plugin_formcreator_forms_id'],
             $export['entities_id'],
             $export['usage_count']);
 
@@ -1821,14 +1822,15 @@ PluginFormcreatorTranslatableInterface
       $input[$formCategoryFk] = $formCategoryId;
 
       // Import form next
-      $formNextFk = PluginFormcreatorForm::getForeignKeyField();
+      $formNextFk = self::getForeignKeyField();
       $formNextId = 0;
-      if ($input[$formNextFk] != '') {
-         $formNext = $linker->getObject($input[$formNextFk], PluginFormcreatorForm::class);
+      if ($input['_plugin_formcreator_form'] != '') {
+         /** @var self $formNext  */
+         $formNext = $linker->getObject($input['_plugin_formcreator_form'], self::class);
          if ($formNext === false) {
-            $formNext = new PluginFormcreatorForm();
+            $formNext = new self();
             $formNext->getFromDBByCrit([
-               'uuid' => $input[$formNextFk],
+               'uuid' => $input['_plugin_formcreator_form'],
             ]);
             if ($formNext->isNewItem()) {
                $linker->postpone($input[$idKey], $item->getType(), $input, $containerId);
