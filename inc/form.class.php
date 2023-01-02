@@ -996,7 +996,7 @@ PluginFormcreatorTranslatableInterface
 
       //Check form redirect
       $used_id = [];
-      if ($input['plugin_formcreator_forms_id'] > 0) {
+      if (($input['plugin_formcreator_forms_id'] ?? 0) > 0) {
          $used_id[] = $input['plugin_formcreator_forms_id'];
          $loop = self::checkLoop($input['plugin_formcreator_forms_id'], $used_id);
          if ($loop) {
