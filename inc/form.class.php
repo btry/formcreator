@@ -288,6 +288,17 @@ PluginFormcreatorTranslatableInterface
          'massiveaction'      => true
       ];
 
+      $tab[] = [
+         'id'                 => '36',
+         'table'              => $this::getTable(),
+         'field'              => 'name',
+         'datatype'           => 'dropdown',
+         'name'               => __('Next form', 'formcreator'),
+         'massiveaction'      => true,
+         // Add virtual condition to relink table
+         'joinparams'        => ['condition' => [new QueryExpression("1=1")]]
+      ];
+
       return $tab;
    }
 
