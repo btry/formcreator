@@ -1023,7 +1023,14 @@ PluginFormcreatorTranslatableInterface
       return $input;
    }
 
-   public function checkLoop($form_id, $flow) {
+   /**
+    * Check that building a sequence between 2 forms does not generate a loop
+    *
+    * @param int $form_id
+    * @param array $flow
+    * @return boolean true if a loop has been detected
+    */
+   public function checkLoop(int $form_id, array $flow): bool {
       $form = new self();
       if ($form->getFromDB($form_id) && $form->fields['plugin_formcreator_forms_id'] > 0) {
          if (in_array($form->fields['plugin_formcreator_forms_id'], $flow)) {
