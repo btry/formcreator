@@ -74,9 +74,14 @@ if ($formAnswer->add($_POST) === false) {
 $form->increaseUsageCount();
 $_SESSION['glpi_use_mode'] = $backup_debug;
 
-if ($form->fields['plugin_formcreator_forms_id'] > 0) {
+if (!PluginFormcreatorForm::isNewID($form->fields['plugin_formcreator_forms_id'])) {
    $nextForm = new PluginFormcreatorForm();
-   if ($nextForm->getFromDB($form->fields['plugin_formcreator_forms_id']) && $nextForm->fields['is_active'] == 1) {
+   $nextForm->getFromDBByCrit([
+      'id'         => $form->fields['plugin_formcreator_forms_id'],
+      'is_active'  => 1,
+      'is_deleted' => 0,
+   ]);
+   if (!$nextForm->isNewItem()) {
       echo json_encode(
          [
             'redirect' => 'formdisplay.php?id=' . $nextForm->getID(),
