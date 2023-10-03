@@ -71,10 +71,11 @@ class SelectField extends RadiosField
 
       if (!empty($this->question->fields['values'])) {
          foreach ($values as $value) {
-            if ((trim($value) != '')) {
-               $unsanitized = Sanitizer::unsanitize(__($value, $domain));
-               $translatedValues[$value] = $unsanitized;
+            if ((trim($value) == '')) {
+               continue;
             }
+            $unsanitized = Sanitizer::unsanitize(__($value, $domain));
+            $translatedValues[$value] = $unsanitized;
          }
 
          $html .= Dropdown::showFromArray($fieldName, $translatedValues, [

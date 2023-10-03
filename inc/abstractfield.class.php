@@ -170,9 +170,10 @@ abstract class PluginFormcreatorAbstractField implements PluginFormcreatorFieldI
       $tab_values = [];
       foreach ($values as $value) {
          $trimmedValue = trim($value);
-         if (($trimmedValue != '')) {
-            $tab_values[$trimmedValue] = $trimmedValue;
+         if (($trimmedValue == '')) {
+            continue;
          }
+         $tab_values[$trimmedValue] = $trimmedValue;
       }
       return $tab_values;
    }
