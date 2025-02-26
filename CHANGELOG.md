@@ -1,3 +1,34 @@
+<a name="2.13.10"></a>
+## [HEAD](https://github.com/pluginsGLPI/formcreator/compare/2.13.9..2.13.10) (2025-02-25)
+
+
+### Bug Fixes
+
+*  SQL error when user ID missing ([17c03589](https://github.com/pluginsGLPI/formcreator/commit/17c03589))
+*  adding 2.13.10 empty sql file ([f6d63ead](https://github.com/pluginsGLPI/formcreator/commit/f6d63ead))
+*  adjust dashboard widget height ([aab508dd](https://github.com/pluginsGLPI/formcreator/commit/aab508dd))
+*  handle negative due date for service levels ([ed147efa](https://github.com/pluginsGLPI/formcreator/commit/ed147efa))
+*  php lint ([aa126102](https://github.com/pluginsGLPI/formcreator/commit/aa126102))
+*  set the default value of the dropdown as empty string (#3563) ([f336e1b4](https://github.com/pluginsGLPI/formcreator/commit/f336e1b4))
+* **abstracttarget:** missing escaping before SQL query ([06d90893](https://github.com/pluginsGLPI/formcreator/commit/06d90893))
+* **dropdownfield:** useless duplicate conditions for tickets ([d81a43eb](https://github.com/pluginsGLPI/formcreator/commit/d81a43eb))
+* **dropdownfield, glpiselectfield:** group restriction (#3489) ([46efb336](https://github.com/pluginsGLPI/formcreator/commit/46efb336))
+* **fieldsfield:** mandatory check failure on dropdowns ([9ac92f04](https://github.com/pluginsGLPI/formcreator/commit/9ac92f04))
+* **fieldsfield:** required property update on UI ([feb1de08](https://github.com/pluginsGLPI/formcreator/commit/feb1de08))
+* **files:** entity (#3566) ([f1ecc2da](https://github.com/pluginsGLPI/formcreator/commit/f1ecc2da))
+* **form:** bad itemtypes names ([11d9e6b8](https://github.com/pluginsGLPI/formcreator/commit/11d9e6b8))
+* **glpiselectfield:** ambiguous column with tickets ([2d5ad80b](https://github.com/pluginsGLPI/formcreator/commit/2d5ad80b))
+* **issue:** SQL warning if groups of the user contain an empty ID ([580eba5b](https://github.com/pluginsGLPI/formcreator/commit/580eba5b))
+* **knowbase:** categories in reverse alphanumeric order ([80119718](https://github.com/pluginsGLPI/formcreator/commit/80119718))
+* **knowbase,form:** kb item translation missing ([603b8eac](https://github.com/pluginsGLPI/formcreator/commit/603b8eac))
+* **ldapfield:** HTML encoding when copying filter from GLPI ([e56eacae](https://github.com/pluginsGLPI/formcreator/commit/e56eacae))
+* **section:** bad update when importing a section with conditions ([15907b83](https://github.com/pluginsGLPI/formcreator/commit/15907b83))
+* **target_actor:** duplication fails for some types ([1ff8a555](https://github.com/pluginsGLPI/formcreator/commit/1ff8a555))
+* **target_actor:** duplication requires export of ID, not name ([3efc9cd7](https://github.com/pluginsGLPI/formcreator/commit/3efc9cd7))
+* **targetticket:** actors format ([e468aa35](https://github.com/pluginsGLPI/formcreator/commit/e468aa35))
+
+
+
 <a name="2.13.9"></a>
 ## [HEAD](https://github.com/pluginsGLPI/formcreator/compare/2.13.8..2.13.9) (2024-03-13)
 
